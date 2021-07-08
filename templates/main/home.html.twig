@@ -1,0 +1,273 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+    <div class="container-xl">
+        <div class="page-header d-print-none">
+            <div class="row align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                        Overview
+                    </div>
+                    <h2 class="page-title">
+                        Dashboard
+                    </h2>
+                </div>
+                <!-- Page title actions -->
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            New Invest
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row">
+
+                {# CONTENT HERE #}
+
+
+
+                <div class="col-lg-6 col-xl-6">
+                    <div class="card">
+                        <div class="card-body" style="position: relative;">
+                            <div id="chart-demo-pie" class="chart-lg"></div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+                                        chart: {
+                                            type: "donut",
+                                            fontFamily: 'inherit',
+                                            height: 240,
+                                            sparkline: {
+                                                enabled: true
+                                            },
+                                            animations: {
+                                                enabled: false
+                                            },
+                                        },
+                                        fill: {
+                                            opacity: 1,
+                                        },
+                                        series: [44, 55, 12, 2],
+                                        labels: ["Direct", "Affilliate", "E-mail", "Other"],
+                                        grid: {
+                                            strokeDashArray: 4,
+                                        },
+                                        colors: ["#206bc4", "#79a6dc", "#d2e1f3", "#e9ecf1"],
+                                        legend: {
+                                            show: true,
+                                            position: 'bottom',
+                                            offsetY: 12,
+                                            markers: {
+                                                width: 10,
+                                                height: 10,
+                                                radius: 100,
+                                            },
+                                            itemMargin: {
+                                                horizontal: 8,
+                                                vertical: 8
+                                            },
+                                        },
+                                        tooltip: {
+                                            fillSeriesColor: false
+                                        },
+                                    })).render();
+                                });
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-xl-6">
+                    <div class="card">
+                        <div class="card-body" style="position: relative;">
+                            <div id="chart-demo-area" class="chart-lg"></div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-area'), {
+                                        chart: {
+                                            type: "area",
+                                            fontFamily: 'inherit',
+                                            height: 240,
+                                            parentHeightOffset: 0,
+                                            toolbar: {
+                                                show: false,
+                                            },
+                                            animations: {
+                                                enabled: false
+                                            },
+                                        },
+                                        dataLabels: {
+                                            enabled: false,
+                                        },
+                                        fill: {
+                                            opacity: .16,
+                                            type: 'solid'
+                                        },
+                                        stroke: {
+                                            width: 2,
+                                            lineCap: "round",
+                                            curve: "smooth",
+                                        },
+                                        series: [{
+                                            name: "series1",
+                                            data: [56, 40, 39, 47, 34, 48, 44]
+                                        }],
+                                        grid: {
+                                            padding: {
+                                                top: -20,
+                                                right: 0,
+                                                left: -4,
+                                                bottom: -4
+                                            },
+                                            strokeDashArray: 4,
+                                        },
+                                        xaxis: {
+                                            labels: {
+                                                padding: 0,
+                                            },
+                                            tooltip: {
+                                                enabled: false
+                                            },
+                                            axisBorder: {
+                                                show: false,
+                                            },
+                                            type: 'datetime',
+                                        },
+                                        yaxis: {
+                                            labels: {
+                                                padding: 4
+                                            },
+                                        },
+                                        labels: [
+                                            '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27'
+                                        ],
+                                        colors: ["#206bc4", "#a55eea"],
+                                        legend: {
+                                            show: true,
+                                            position: 'bottom',
+                                            offsetY: 12,
+                                            markers: {
+                                                width: 10,
+                                                height: 10,
+                                                radius: 100,
+                                            },
+                                            itemMargin: {
+                                                horizontal: 8,
+                                                vertical: 8
+                                            },
+                                        },
+                                    })).render();
+                                });
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin: 0.5rem"></div>
+
+                <div class="col-12">
+                    <div class="card">
+                        {% set nb = 0 %}
+                        <div class="card-header">
+                            <h3 class="card-title">Investissement</h3>
+                        </div>
+                        <div class="table-responsive" style="height: 200px; overflow-x: hidden">
+                            <table class="table card-table table-vcenter text-nowrap datatable">
+                                <thead>
+                                <tr>
+                                    <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
+                                    <th class="w-1">No.</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Risk</th>
+                                    <th>Created</th>
+                                    <th>Last add</th>
+                                    <th>Status (24h)</th>
+                                    <th>Total Value</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for invest in investissements %}
+                                        {% set nb = loop.index %}
+                                        <tr>
+                                            <td><input class="form-check-input m-0 align-middle" type="checkbox"
+                                                       aria-label="Select invoice"></td>
+                                            <td><span class="text-muted">{{ loop.index }}</span></td>
+                                            <td>
+                                                <a href="invoice.html" class="text-reset" tabindex="-1">
+                                                    {{ invest.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ invest.type }}
+                                            </td>
+                                            <td>
+                                                {{ invest.risk }}
+                                            </td>
+                                            <td>
+                                                {{ invest.dateCreated|date('d/m/Y') }}
+                                            </td>
+                                            <td>
+                                                {{ invest.lastModif|date('d/m/Y') }}
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success me-1">
+                                                    {{ invest.statut }}
+                                                </span>
+                                            </td>
+                                            <td>{{ invest.totalValue }}</td>
+
+                                            <td class="text-end">
+                                                <span class="dropdown">
+                                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
+                                                          data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
+                                                  <div class="dropdown-menu dropdown-menu-end" style="min-width: 7rem">
+                                                    <a class="dropdown-item" href="#" style="min-width: 7rem">
+                                                      Modify
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                      Delete
+                                                    </a>
+                                                  </div>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <p class="m-0 text-muted">Total: <span>{{ nb }}</span> </p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block title %}{{ parent() }} | Home{% endblock %}
