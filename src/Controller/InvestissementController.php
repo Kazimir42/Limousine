@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\InvestissementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,11 +30,27 @@ class InvestissementController extends AbstractController
     }
 
     /**
-     * @Route("/edit", name="edit")
+     * @Route("/{id}/edit", name="edit")
      */
-    public function edit(): Response
+    public function edit(int $id, InvestissementRepository $investissementRepository): Response
     {
+        $invest = $investissementRepository->find($id);
+
         return $this->render('investissement/edit.html.twig', [
+            "investissement" => $invest
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}", name="view")
+     */
+    public function view(int $id, InvestissementRepository $investissementRepository): Response
+    {
+        $invest = $investissementRepository->find($id);
+
+        return $this->render('investissement/view.html.twig', [
+            "investissement" => $invest
         ]);
     }
 }

@@ -20,8 +20,37 @@
     {# NAVBAR #}
     {% include('inc/nav.html.twig') %}
 
-    {# CONTENT #}
-    {% block body %}{% endblock %}
+
+
+    <div class="container-xl">
+        <div class="page-header d-print-none">
+            <div class="row align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                        {# CAT #}
+                        {% block cath1 %}{% endblock %}
+                    </div>
+                    <h1 class="page-title">
+                        {# H1 #}
+                        {% block h1 %}{% endblock %}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row">
+                {# CONTENT #}
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
 
     {# FOOTER #}
     {% include('inc/footer.html.twig') %}
