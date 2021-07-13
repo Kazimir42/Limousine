@@ -10,8 +10,6 @@
             <div class="card-body" style="position: relative;">
                 <div id="chart-demo-pie" class="chart-lg"></div>
 
-
-
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
                         window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
@@ -65,7 +63,6 @@
                         })).render();
                     });
                 </script>
-
 
             </div>
         </div>
@@ -175,7 +172,7 @@
                         <th>Risk</th>
                         <th>Created</th>
                         <th>Last add</th>
-                        <th>Status (24h)</th>
+                        <th>Status (1y)</th>
                         <th>Total Value</th>
                         <th></th>
                     </tr>
@@ -204,10 +201,11 @@
                                     {{ invest.lastModif|date('d/m/Y') }}
                                 </td>
                                 <td>
-                                    {% if invest.statut %}
+                                    {% if invest.statut == 1 %}
                                     <span class="badge bg-success me-1">
-                                        {{ invest.statut }}
+                                        UP
                                     </span>
+                                    {% endif %}
                                 </td>
                                 <td>{{ invest.totalValue }}</td>
 
