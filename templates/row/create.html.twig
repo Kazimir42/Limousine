@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block cath1 %}Row {% endblock %}
+{% block h1 %}Creation {% endblock %}
+
+{% block body %}
+
+
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add a new Row</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(rowForm) }}
+                <div class="form-group mb-3 ">
+                        <label class="form-label">Name</label>
+                        <div>
+                            {{ form_widget(rowForm.name, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Number</label>
+                        <div>
+                            {{ form_widget(rowForm.number, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Value</label>
+                        <div>
+                            {{ form_widget(rowForm.value, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Total value</label>
+                        <div>
+                            {{ form_widget(rowForm.totalValue, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button class="btn btn-primary">Create</button>
+                    </div>
+                {{ form_end(rowForm) }}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block title %}{{ parent() }} | Home{% endblock %}

@@ -23,10 +23,10 @@
                             Update
                           </a>
                         </span>
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                        <a href="{{path("row_create", {'id': investissement.id})}}" class="btn btn-primary d-none d-sm-inline-block">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Add rows
+                            Add row
                         </a>
                     </div>
                 </div>
@@ -42,13 +42,69 @@
 
                 {% if investissement.totalValue == null %}
                     <p>Total value : 0 {{ investissement.devise }}
-                        <a href="#">
+                        <a href="{{path("row_create", {'id': investissement.id})}}">
                         Add rows
                         </a>
                     </p>
                 {% else %}
                     <p>Total value : {{investissement.totalValue}}</p>
                 {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <div style="margin: 0.5rem"></div>
+
+    <div class="col-12">
+        <div class="card">
+            {% set nb = 0 %}
+            <div class="card-header">
+                <h3 class="card-title">All rows</h3>
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <a href="{{ path("row_create", {'id': investissement.id}) }}" class="btn btn-primary d-none d-sm-inline-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add row
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Number</th>
+                        <th>Value (one)</th>
+                        <th>Total value</th>
+                        <th class="w-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in rows %}
+                        {% set nb = loop.index %}
+                    <tr>
+                        <td>{{row.name|upper}}</td>
+                        <td class="">
+                            {{ row.number }}
+                        </td>
+                        <td class="">
+                            {{ row.value }}
+                        </td>
+                        <td class="">
+                            {{ row.totalValue }}
+                        </td>
+                        <td>
+                            <a href="#">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex align-items-center">
+                <p class="m-0 text-muted">Total: <span>{{ nb }}</span> </p>
             </div>
         </div>
     </div>

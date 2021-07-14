@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Calcul\CalcBdd;
 use App\Entity\Investissement;
 use App\Entity\User;
 use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
+use App\Repository\RowRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -79,12 +81,19 @@ class InvestissementController extends AbstractController
     /**
      * @Route("/{id}", name="view")
      */
-    public function view(int $id, InvestissementRepository $investissementRepository): Response
+    public function view(int $id, InvestissementRepository $investissementRepository, RowRepository $rowRepository, CalcBdd $calcBdd): Response
     {
         $invest = $investissementRepository->find($id);
+        $rows = $rowRepository->findAllByInvestId($invest);
+
+
+        //$total = $calcBdd->totalValue($rows);
+        //$invest->setTotalValue($total);
+
 
         return $this->render('investissement/view.html.twig', [
-            "investissement" => $invest
+            "investissement" => $invest,
+            "rows" => $rows
         ]);
     }
 }

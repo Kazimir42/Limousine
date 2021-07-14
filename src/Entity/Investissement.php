@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InvestissementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +68,16 @@ class Investissement
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="investissements")
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Row::class, mappedBy="investAttach")
+     */
+    private $rows;
+
+    public function __construct()
+    {
+        $this->rows = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -188,6 +200,36 @@ class Investissement
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Row[]
+     */
+    public function getRows(): Collection
+    {
+        return $this->rows;
+    }
+
+    public function addRow(Row $row): self
+    {
+        if (!$this->rows->contains($row)) {
+            $this->rows[] = $row;
+            $row->setInvestAttach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRow(Row $row): self
+    {
+        if ($this->rows->removeElement($row)) {
+            // set the owning side to null (unless already changed)
+            if ($row->getInvestAttach() === $this) {
+                $row->setInvestAttach(null);
+            }
+        }
 
         return $this;
     }
