@@ -14,7 +14,9 @@ class MainController extends AbstractController
      */
     public function home(InvestissementRepository $investissementRepository): Response{
 
-        $investissements = $investissementRepository->findAllByUserId(1);
+        $user = $this->getUser();
+
+        $investissements = $investissementRepository->findAllByUserId($user);
 
 
         return $this->render('main/home.html.twig', [

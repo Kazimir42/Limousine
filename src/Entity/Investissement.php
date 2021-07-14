@@ -53,7 +53,7 @@ class Investissement
     private $statut;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $totalValue;
 
@@ -156,7 +156,7 @@ class Investissement
         return $this;
     }
 
-    public function getDevise(): ?float
+    public function getDevise(): ?string
     {
         return $this->devise;
     }

@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Investissement;
+use App\Entity\User;
+use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,18 +19,47 @@ class InvestissementController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(): Response
+    public function index(InvestissementRepository $investissementRepository): Response
     {
+        $user = $this->getUser();
+
+        $investissements = $investissementRepository->findAllByUserId($user);
+
         return $this->render('investissement/home.html.twig', [
+            "investissements" => $investissements
         ]);
     }
 
     /**
      * @Route("/create", name="create")
      */
-    public function create(): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
+
+        $invest = new Investissement();
+        $invest->setDateCreated(new \DateTime());
+        $invest->setLastModif(new \DateTime());
+        $invest->setStatut(true);
+        $invest->setUser($user);
+
+        $investForm = $this->createForm(InvestissementType::class, $invest);
+
+        $investForm->handleRequest($request);
+
+        if ($investForm->isSubmitted() && $investForm->isValid()){
+
+            $entityManager->persist($invest);
+            $entityManager->flush();
+
+            $this->addFlash('succes','invest add');
+            return $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
+
+        }
+
         return $this->render('investissement/create.html.twig', [
+            'investissementForm' => $investForm->createView()
         ]);
     }
 

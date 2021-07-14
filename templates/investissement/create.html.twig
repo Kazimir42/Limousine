@@ -7,6 +7,58 @@
 
 
 
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add a new Invest</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(investissementForm) }}
+                <div class="form-group mb-3 ">
+                        <label class="form-label">Name</label>
+                        <div>
+                            {{ form_widget(investissementForm.name, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Type</label>
+                        <div>
+                            {{ form_widget(investissementForm.type, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Risk</label>
+                        <div>
+                            {{ form_widget(investissementForm.risk, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Devise</label>
+                        <div>
+                            {{ form_widget(investissementForm.devise, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button class="btn btn-primary">Create</button>
+                    </div>
+                {{ form_end(investissementForm) }}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
 
 {% block title %}{{ parent() }} | Home{% endblock %}
