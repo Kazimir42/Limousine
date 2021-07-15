@@ -13,16 +13,16 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
-                          <a href="{{ path('investissement_delete', {'id': investissement.id}) }}" class="btn btn-white">
+                          <a href="{{ path('investissement_delete', {'id': investissement.id}) }}" class="btn btn-primary">
                             Delete
                           </a>
                         </span>
                         <span class="d-none d-sm-inline">
-                          <a href="{{ path('investissement_edit', {'id': investissement.id}) }}" class="btn btn-white">
+                          <a href="{{ path('investissement_edit', {'id': investissement.id}) }}" class="btn btn-primary">
                             Update
                           </a>
                         </span>
-                        <a href="{{path("row_create", {'id': investissement.id})}}" class="btn btn-white">
+                        <a href="{{path("row_create", {'id': investissement.id})}}" class="btn btn-primary">
                             Add row
                         </a>
                     </div>
@@ -92,8 +92,8 @@
                         <td class="">
                             {{ row.totalValue|number_format(2, '.', ' ') }}{{ investissement.devise == 'EUR' ? '€' : '$'}}
                         </td>
-                        <td>
-                            <a href="{{ path("row_update", {'id': investissement.id, 'rowId': row.id}) }}">Update</a>
+                        <td style='width: 130px'>
+                            <a href="{{ path("row_update", {'id': investissement.id, 'rowId': row.id}) }}">Update</a> |
                             <a href="{{ path("row_delete", {'id': investissement.id, 'rowId': row.id}) }}">Delete</a>
                         </td>
                     </tr>

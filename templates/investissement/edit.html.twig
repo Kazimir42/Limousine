@@ -41,6 +41,7 @@
                 </div>
                 <div class="form-footer">
                     <button class="btn btn-primary">Edit</button>
+                    <a href="{{ path('investissement_view', {'id': investissement.id}) }}" class="btn btn-white">Cancel</a>
                 </div>
                 {{ form_end(investEditForm) }}
             </div>

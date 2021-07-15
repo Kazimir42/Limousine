@@ -5,11 +5,27 @@
 
 {% block body %}
 
+
+
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Total : </h2>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div style="margin: 0.5rem"></div>
+
+
+
     <div class="col-lg-6 col-xl-6">
         <div class="card">
             <div class="card-body" style="position: relative;">
                 <div id="chart-demo-pie" class="chart-lg"></div>
-
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
                         window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
@@ -63,7 +79,6 @@
                         })).render();
                     });
                 </script>
-
             </div>
         </div>
     </div>

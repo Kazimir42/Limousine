@@ -16,9 +16,8 @@
 
                     {{ form_widget(investDeleteForm) }}
 
-                    <div class="col-6 col-sm-4 col-md-2 col-xl mb-3">
-                        <button class="btn btn-danger w-100">Delete</button>
-                    </div>
+                    <button class="btn btn-danger">Delete</button>
+                    <a href="{{ path('investissement_view', {'id': investissement.id}) }}" class="btn btn-white">Cancel</a>
 
                 {{ form_end(investDeleteForm) }}
             </div>

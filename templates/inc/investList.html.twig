@@ -57,24 +57,24 @@
                                     </span>
                             {% endif %}
                         </td>
-                        <td>{{ invest.totalValue|number_format(2, '.', ' ') }} {{ invest.devise == 'EUR' ? '€' : '$'}}</td>
+                        <td>{{ invest.totalValue|number_format(2, '.', ' ') }}{{ invest.devise == 'EUR' ? '€' : '$'}}</td>
 
                         <td class="text-end">
-                                    <span class="dropdown">
-                                      <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
-                                              data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
-                                      <div class="dropdown-menu dropdown-menu-end" style="min-width: 7rem">
-                                          <a class="dropdown-item" href="{{ path('investissement_view', {'id': invest.id}) }}" style="min-width: 7rem">
-                                            View
-                                          </a>
-                                          <a class="dropdown-item" href="{{ path('investissement_edit', {'id': invest.id}) }}" style="min-width: 7rem">
-                                            Edit
-                                          </a>
-                                          <a class="dropdown-item" href="{{ path('investissement_delete', {'id': invest.id}) }}">
-                                            Delete
-                                          </a>
-                                      </div>
-                                    </span>
+                            <span class="dropdown">
+                                <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
+                                        data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
+                                <div class="dropdown-menu dropdown-menu-end" style="min-width: 7rem">
+                                    <a class="dropdown-item" href="{{ path('investissement_view', {'id': invest.id}) }}" style="min-width: 7rem">
+                                        View
+                                    </a>
+                                    <a class="dropdown-item" href="{{ path('investissement_edit', {'id': invest.id}) }}" style="min-width: 7rem">
+                                        Edit
+                                    </a>
+                                    <a class="dropdown-item" href="{{ path('investissement_delete', {'id': invest.id}) }}">
+                                        Delete
+                                    </a>
+                                </div>
+                            </span>
                         </td>
                     </tr>
                 {% endfor %}

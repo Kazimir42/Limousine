@@ -58,6 +58,7 @@ class RowController extends AbstractController
 
             $newTotalInvestValue = $invest->getTotalValue() + $difference;
 
+            $invest->setLastModif(new \DateTime());
             $invest->setTotalValue($newTotalInvestValue);
             $entityManager->persist($invest);
             $entityManager->flush();
@@ -144,7 +145,7 @@ class RowController extends AbstractController
         return $this->render('row/delete.html.twig', [
             'rowDeleteForm' => $rowDeleteForm->createView(),
             'row' => $row,
-            'invest' => $invest
+            'investissement' => $invest
         ]);
     }
 }

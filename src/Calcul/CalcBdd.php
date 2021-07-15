@@ -10,11 +10,11 @@ class CalcBdd
 {
     private $total;
 
-    public function totalValue($rows){
+    public function totalValue($invests){
 
         $total = 0;
 
-        foreach ($rows as $row)
+        foreach ($invests as $row)
         {
             $total += $row->getTotalValue();
         }

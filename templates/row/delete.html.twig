@@ -11,17 +11,15 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Delete {{ row.name|upper }}'s row from {{ invest.name }}</h3>
+                <h3 class="card-title">Delete {{ row.name|upper }}'s row from {{ investissement.name }}</h3>
             </div>
             <div class="card-body">
                 {{ form_start(rowDeleteForm) }}
 
                     {{ form_widget(rowDeleteForm) }}
 
-                    <div class="col-6 col-sm-4 col-md-2 col-xl mb-3">
-                        <button class="btn btn-danger w-100">Delete</button>
-                    </div>
-
+                        <button class="btn btn-danger">Delete</button>
+                        <a href="{{ path('investissement_view', {'id': investissement.id}) }}" class="btn btn-white">Cancel</a>
                 {{ form_end(rowDeleteForm) }}
             </div>
         </div>
