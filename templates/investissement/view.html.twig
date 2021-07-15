@@ -2,7 +2,6 @@
 
 {% block cath1 %}Investissement{% endblock %}
 {% block h1 %}View{% endblock %}
-
 {% block body %}
 
 
@@ -23,9 +22,7 @@
                             Update
                           </a>
                         </span>
-                        <a href="{{path("row_create", {'id': investissement.id})}}" class="btn btn-primary d-none d-sm-inline-block">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <a href="{{path("row_create", {'id': investissement.id})}}" class="btn btn-white">
                             Add row
                         </a>
                     </div>
@@ -36,18 +33,18 @@
 
             </div>
             <div class="card-body">
-                <p>Risk : {{investissement.risk}}</p>
-                <p>Created : {{investissement.dateCreated|date("d/m/Y")}}</p>
-                <p>Last add : {{investissement.lastModif|date("d/m/Y")}}</p>
+                <p><span class="font-weight-bold">Risk :</span> {{investissement.risk}}</p>
+                <p><span class="font-weight-bold">Created :</span> {{investissement.dateCreated|date("d/m/Y")}}</p>
+                <p><span class="font-weight-bold">Last add :</span> {{investissement.lastModif|date("d/m/Y")}}</p>
 
                 {% if investissement.totalValue == null %}
-                    <p>Total value : 0 {{ investissement.devise }}
+                    <p><span class="font-weight-bold">Total value :</span> 0 {{ investissement.devise }}
                         <a href="{{path("row_create", {'id': investissement.id})}}">
                         Add rows
                         </a>
                     </p>
                 {% else %}
-                    <p>Total value : {{investissement.totalValue}}</p>
+                    <p><span class="font-weight-bold">Total value :</span> {{investissement.totalValue}}</p>
                 {% endif %}
             </div>
         </div>
@@ -96,7 +93,8 @@
                             {{ row.totalValue }}
                         </td>
                         <td>
-                            <a href="#">Edit</a>
+                            <a href="{{ path("row_update", {'id': investissement.id, 'rowId': row.id}) }}">Update</a>
+                            <a href="{{ path("row_delete", {'id': investissement.id, 'rowId': row.id}) }}">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}

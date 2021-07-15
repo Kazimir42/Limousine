@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Calcul\CalcBdd;
 use App\Entity\Investissement;
 use App\Entity\User;
+use App\Form\InvestissementDeleteType;
 use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
@@ -94,6 +95,45 @@ class InvestissementController extends AbstractController
         return $this->render('investissement/view.html.twig', [
             "investissement" => $invest,
             "rows" => $rows
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="delete")
+     */
+    public function delete(int $id, InvestissementRepository $investissementRepository, Request $request, EntityManagerInterface $entityManager, RowRepository $rowRepository): Response
+    {
+        $invest = $investissementRepository->find($id);
+
+
+        $rows = $rowRepository->findAllByInvestId($invest->getId());
+
+
+        $investDeleteForm = $this->createForm(InvestissementDeleteType::class, $invest);
+        $investDeleteForm->handleRequest($request);
+
+
+        if ($investDeleteForm->isSubmitted()){
+
+            //delete row from this invest (cause of FK KEY)
+            foreach ($rows as $row){
+                $entityManager->remove($row);
+                $entityManager->flush();
+            }
+
+            //delete invest from db
+            $entityManager->remove($invest);
+            $entityManager->flush();
+
+            $this->addFlash('succes','invest delete');
+            return $this->redirectToRoute('main_home');
+        }
+
+
+
+        return $this->render('investissement/delete.html.twig', [
+            "investDeleteForm" => $investDeleteForm->createView(),
+            "investissement" => $invest
         ]);
     }
 }

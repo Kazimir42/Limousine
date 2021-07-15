@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block cath1 %}Investissement {% endblock %}
+{% block h1 %}Delete {% endblock %}
+
+{% block body %}
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Delete {{ investissement.name|upper }} and all rows</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(investDeleteForm) }}
+
+                    {{ form_widget(investDeleteForm) }}
+
+                    <div class="col-6 col-sm-4 col-md-2 col-xl mb-3">
+                        <button class="btn btn-danger w-100">Delete</button>
+                    </div>
+
+                {{ form_end(investDeleteForm) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block title %}{{ parent() }} | Home{% endblock %}

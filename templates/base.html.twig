@@ -36,6 +36,20 @@
                         {% block h1 %}{% endblock %}
                     </h1>
                 </div>
+                {% if app.request.pathinfo == "/" %}
+                <div class="col-auto">
+                    <h1 class="page-title">
+                        Total :
+                        {% set total = 0 %}
+                        {% for invest in investissements %}
+                        {# {% set total = invest.totalValue %} #}
+                        {% endfor %}
+                        {{ total }}
+
+
+                    </h1>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
