@@ -13,12 +13,12 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
-                          <a href="#" class="btn btn-white">
+                          <a href="{{ path('investissement_delete', {'id': investissement.id}) }}" class="btn btn-white">
                             Delete
                           </a>
                         </span>
                         <span class="d-none d-sm-inline">
-                          <a href="#" class="btn btn-white">
+                          <a href="{{ path('investissement_edit', {'id': investissement.id}) }}" class="btn btn-white">
                             Update
                           </a>
                         </span>
@@ -38,13 +38,13 @@
                 <p><span class="font-weight-bold">Last add :</span> {{investissement.lastModif|date("d/m/Y")}}</p>
 
                 {% if investissement.totalValue == null %}
-                    <p><span class="font-weight-bold">Total value :</span> 0 {{ investissement.devise }}
+                    <p><span class="font-weight-bold">Total value :</span> 0 {{ investissement.devise == 'EUR' ? '€' : '$'}}
                         <a href="{{path("row_create", {'id': investissement.id})}}">
                         Add rows
                         </a>
                     </p>
                 {% else %}
-                    <p><span class="font-weight-bold">Total value :</span> {{investissement.totalValue}}</p>
+                    <p><span class="font-weight-bold">Total value :</span> {{investissement.totalValue|number_format(2, '.', ' ')}}{{ investissement.devise == 'EUR' ? '€' : '$'}}</p>
                 {% endif %}
             </div>
         </div>
@@ -87,10 +87,10 @@
                             {{ row.number }}
                         </td>
                         <td class="">
-                            {{ row.value }}
+                            {{ row.value|number_format(2, '.', ' ') }}{{ investissement.devise == 'EUR' ? '€' : '$'}}
                         </td>
                         <td class="">
-                            {{ row.totalValue }}
+                            {{ row.totalValue|number_format(2, '.', ' ') }}{{ investissement.devise == 'EUR' ? '€' : '$'}}
                         </td>
                         <td>
                             <a href="{{ path("row_update", {'id': investissement.id, 'rowId': row.id}) }}">Update</a>

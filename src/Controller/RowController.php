@@ -6,6 +6,7 @@ use App\Entity\Investissement;
 use App\Entity\Row;
 use App\Form\RowDeleteType;
 use App\Form\RowType;
+use App\Form\RowUpdateType;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,12 +31,46 @@ class RowController extends AbstractController
     }
 
     /**
-     * @Route("", name="update")
+     * @Route("/{rowId}/update", name="update")
      */
-    public function update(): Response
+    public function update(int $id, int $rowId, Request $request, EntityManagerInterface $entityManager, InvestissementRepository $investissementRepository, RowRepository $rowRepository): Response
     {
-        return $this->render('row/index.html.twig', [
-            'controller_name' => 'RowController',
+        $invest = new Investissement();
+        $invest = $investissementRepository->find($id);
+
+
+        $row = new Row();
+        $row = $rowRepository->find($rowId);
+
+        $lastTotalRowValue = $row->getTotalValue();
+
+        $rowUpdateForm = $this->createForm(RowUpdateType::class, $row);
+        $rowUpdateForm->handleRequest($request);
+
+        if ($rowUpdateForm->isSubmitted() && $rowUpdateForm->isValid()){
+            $entityManager->persist($row);
+            $entityManager->flush();
+
+            $newTotalRowValue = $row->getTotalValue();
+
+            $difference = $newTotalRowValue - $lastTotalRowValue;
+
+
+            $newTotalInvestValue = $invest->getTotalValue() + $difference;
+
+            $invest->setTotalValue($newTotalInvestValue);
+            $entityManager->persist($invest);
+            $entityManager->flush();
+
+            $this->addFlash('success','row update');
+            return  $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
+        }
+
+
+        return $this->render('row/update.html.twig', [
+            'investissements' => $invest,
+            'row' => $row,
+            'rowUpdateForm' => $rowUpdateForm->createView()
         ]);
     }
 
@@ -65,7 +100,7 @@ class RowController extends AbstractController
             $entityManager->persist($invest);
             $entityManager->flush();
 
-            $this->addFlash('succes', 'row add');
+            $this->addFlash('success', 'row add');
             return  $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
 
         }
@@ -102,7 +137,7 @@ class RowController extends AbstractController
             $entityManager->persist($invest);
             $entityManager->flush();
 
-            $this->addFlash('succes','row delete');
+            $this->addFlash('success','row delete');
             return $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
         }
 

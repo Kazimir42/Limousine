@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block cath1 %}Row {% endblock %}
+{% block h1 %}Update {% endblock %}
+
+{% block body %}
+
+
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Update {{ row.name }} row of <a href="{{ path('investissement_view', {'id': investissements.id}) }}">{{ investissements.name }}</a> </h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(rowUpdateForm) }}
+                <div class="form-group mb-3 ">
+                        <label class="form-label">Name</label>
+                        <div>
+                            {{ form_widget(rowUpdateForm.name, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Number</label>
+                        <div>
+                            {{ form_widget(rowUpdateForm.number, {'attr': {'class': 'form-control'}}) }}
+                            <small class="form-hint">Description to write</small>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Value (one)</label>
+                        <div>
+                            {{ form_widget(rowUpdateForm.value, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Total value</label>
+                        <div>
+                            {{ form_widget(rowUpdateForm.totalValue, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button class="btn btn-primary">Update</button>
+                    </div>
+                {{ form_end(rowUpdateForm) }}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block title %}{{ parent() }} | Home{% endblock %}

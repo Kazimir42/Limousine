@@ -6,6 +6,7 @@ use App\Calcul\CalcBdd;
 use App\Entity\Investissement;
 use App\Entity\User;
 use App\Form\InvestissementDeleteType;
+use App\Form\InvestissementEditType;
 use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
@@ -56,7 +57,7 @@ class InvestissementController extends AbstractController
             $entityManager->persist($invest);
             $entityManager->flush();
 
-            $this->addFlash('succes','invest add');
+            $this->addFlash('success','invest add');
             return $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
 
         }
@@ -69,12 +70,27 @@ class InvestissementController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit")
      */
-    public function edit(int $id, InvestissementRepository $investissementRepository): Response
+    public function edit(int $id, InvestissementRepository $investissementRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $invest = $investissementRepository->find($id);
 
+        $investEditForm = $this->createForm(InvestissementEditType::class, $invest);
+        $investEditForm->handleRequest($request);
+
+        if ($investEditForm->isSubmitted() && $investEditForm->isValid()){
+
+            //$investissementRepository->update($invest);
+
+            $entityManager->persist($invest);
+            $entityManager->flush();
+
+            $this->addFlash('success','invest edit');
+            return $this->redirectToRoute('main_home');
+        }
+
         return $this->render('investissement/edit.html.twig', [
-            "investissement" => $invest
+            "investissement" => $invest,
+            "investEditForm" => $investEditForm->createView()
         ]);
     }
 
@@ -125,7 +141,7 @@ class InvestissementController extends AbstractController
             $entityManager->remove($invest);
             $entityManager->flush();
 
-            $this->addFlash('succes','invest delete');
+            $this->addFlash('success','invest delete');
             return $this->redirectToRoute('main_home');
         }
 

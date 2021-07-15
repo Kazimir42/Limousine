@@ -57,7 +57,7 @@
                                     </span>
                             {% endif %}
                         </td>
-                        <td>{{ invest.totalValue }}</td>
+                        <td>{{ invest.totalValue|number_format(2, '.', ' ') }} {{ invest.devise == 'EUR' ? '€' : '$'}}</td>
 
                         <td class="text-end">
                                     <span class="dropdown">
