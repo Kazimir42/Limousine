@@ -25,7 +25,10 @@
                     <div class="form-group mb-3 ">
                         <label class="form-label">Number</label>
                         <div>
-                            {{ form_widget(rowUpdateForm.number, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_widget(rowUpdateForm.number, {'attr': {
+                                'class': 'form-control',
+                                'oninput': 'calcTotalValue()'
+                            }}) }}
                             <small class="form-hint">Description to write</small>
 
                         </div>
@@ -33,7 +36,10 @@
                     <div class="form-group mb-3 ">
                         <label class="form-label">Value (one)</label>
                         <div>
-                            {{ form_widget(rowUpdateForm.value, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_widget(rowUpdateForm.value, {'attr': {
+                                'class': 'form-select',
+                                'oninput': 'calcTotalValue()'
+                            }}) }}
                         </div>
                     </div>
                     <div class="form-group mb-3 ">
@@ -53,7 +59,23 @@
 
 
 
+<script>
 
+    function calcTotalValue(){
+
+        let numberOf = document.getElementById("row_update_number").value;
+        let valueOne = document.getElementById("row_update_value").value;
+
+        let totalValue = document.getElementById("row_update_totalValue");
+        total = valueOne * numberOf;
+        total = total.toFixed(2);
+
+        totalValue.value = total;
+    }
+
+
+
+</script>
 
 
 

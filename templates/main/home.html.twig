@@ -11,7 +11,16 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">Total : </h2>
+                <h2 class="card-title">Account total :&nbsp;
+                    <span class="values">
+                        {{ app.user.accountTotalValue|number_format(2, '.', ' ') }}{{ app.user.accountTotalValue == 'EUR' ? '€' : '$'}}
+                    </span>
+                    &nbsp;
+                    <span>
+                        ({{ bigTotalEur|number_format(2, '.', ' ') }}€)
+                    </span>
+                </h2>
+
 
             </div>
         </div>
@@ -32,12 +41,12 @@
                             chart: {
                                 type: "donut",
                                 fontFamily: 'inherit',
-                                height: 240,
+                                height: 270,
                                 sparkline: {
                                     enabled: true
                                 },
                                 animations: {
-                                    enabled: false
+                                    enabled: true
                                 },
                             },
                             fill: {
@@ -45,7 +54,12 @@
                             },
                             series: [
                                 {% for invest in investissements %}
-                                    {{ invest.totalValue }},
+                                    {% if invest.devise == 'EUR' %}
+                                        {{ invest.totalValue * 0.82}},
+                                    {% else %}
+                                        {{ invest.totalValue }},
+                                    {% endif %}
+
                                 {% endfor %}
                             ],
                             labels: [
@@ -99,7 +113,7 @@
                                     show: false,
                                 },
                                 animations: {
-                                    enabled: false
+                                    enabled: true
                                 },
                             },
                             dataLabels: {

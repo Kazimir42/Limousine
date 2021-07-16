@@ -54,6 +54,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lastname;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $devise;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $accountTotalValue;
+
     public function __construct()
     {
         $this->investissements = new ArrayCollection();
@@ -198,6 +208,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getDevise(): ?string
+    {
+        return $this->devise;
+    }
+
+    public function setDevise(string $devise): self
+    {
+        $this->devise = $devise;
+
+        return $this;
+    }
+
+    public function getAccountTotalValue(): ?float
+    {
+        return $this->accountTotalValue;
+    }
+
+    public function setAccountTotalValue(?float $accountTotalValue): self
+    {
+        $this->accountTotalValue = $accountTotalValue;
 
         return $this;
     }

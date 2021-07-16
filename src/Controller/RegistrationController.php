@@ -19,6 +19,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
+        $user->setDevise("USD");
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
