@@ -95,6 +95,8 @@ class RowController extends AbstractController
             $entityManager->persist($row);
             $entityManager->flush();
 
+
+            $invest->setLastModif(new \DateTime());
             //update price in db
             $newTotalInvestValue = $invest->getTotalValue() + $row->getTotalValue();
             $invest->setTotalValue($newTotalInvestValue);

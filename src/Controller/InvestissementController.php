@@ -98,14 +98,10 @@ class InvestissementController extends AbstractController
     /**
      * @Route("/{id}", name="view")
      */
-    public function view(int $id, InvestissementRepository $investissementRepository, RowRepository $rowRepository, CalcBdd $calcBdd): Response
+    public function view(int $id, InvestissementRepository $investissementRepository, RowRepository $rowRepository): Response
     {
         $invest = $investissementRepository->find($id);
         $rows = $rowRepository->findAllByInvestId($invest);
-
-
-        //$total = $calcBdd->totalValue($rows);
-        //$invest->setTotalValue($total);
 
 
         return $this->render('investissement/view.html.twig', [
