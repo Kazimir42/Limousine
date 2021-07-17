@@ -60,11 +60,6 @@ class Investissement
     private $totalValue;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $devise;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="investissements")
      */
     private $user;
@@ -164,18 +159,6 @@ class Investissement
     public function setTotalValue(float $totalValue): self
     {
         $this->totalValue = $totalValue;
-
-        return $this;
-    }
-
-    public function getDevise(): ?string
-    {
-        return $this->devise;
-    }
-
-    public function setDevise(string $devise): self
-    {
-        $this->devise = $devise;
 
         return $this;
     }

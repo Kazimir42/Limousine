@@ -23,13 +23,6 @@ class InvestissementType extends AbstractType
                 ],
                 'multiple' => false
             ])
-            ->add('devise', ChoiceType::class, [
-                'choices' => [
-                    'EUR' => 'EUR',
-                    'USD' => 'USD',
-                ],
-                'multiple' => false
-            ])
         ;
     }
 

@@ -2,24 +2,38 @@
 
 namespace App\Service;
 
+use App\Repository\CurrencyChangeRepository;
 use App\Repository\InvestissementRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Security;
 
-class AccountTotalMath
+class AccountTotalMath extends AbstractController
 {
 
     private $investissements;
+    private $security;
+    private $currencyChangeRepository;
 
-    public function __construct(InvestissementRepository $investissements)
+    public function __construct(InvestissementRepository $investissements, Security $security, CurrencyChangeRepository $currencyChangeRepository)
     {
         $this->investissements = $investissements;
+        $this->security = $security;
+        $this->currencyChangeRepository = $currencyChangeRepository;
     }
 
 
     public function totalCalcUSD($investissements){
-        $EUR_TO_USD_DIF  = 1.18;
+
+        $user = $this->security->getUser();
+
+        $currencyRateValue = $this->currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue();
+
+        $EUR_TO_USD_DIF = $currencyRateValue;
+
         $totalU = 0;
+
         foreach ($investissements as $invest){
-            $currentDevise = $invest->getDevise();
+            $currentDevise = $user->getDevise();
             if ($currentDevise == "EUR"){
                 $totalEUR = $invest->getTotalValue(); //le total en EUR de cette investissement
                 $totalUSD = $totalEUR * $EUR_TO_USD_DIF;
@@ -32,11 +46,17 @@ class AccountTotalMath
     }
 
     public function totalCalcEUR($investissements){
-        $USD_TO_EUR_DIF  = 0.82;
+
+        $user = $this->security->getUser();
+
+        $currencyRateValue = $this->currencyChangeRepository->findOneBy(array('currencyFrom' => 'USD', 'currencyTo' => 'EUR'))->getRateValue();
+
+        $USD_TO_EUR_DIF = $currencyRateValue;
+
         $totalE = 0;
 
         foreach ($investissements as $invest){
-            $currentDevise = $invest->getDevise();
+            $currentDevise = $user->getDevise();
             if ($currentDevise == "USD"){
                 $totalUSD = $invest->getTotalValue(); //le total en EUR de cette investissement
                 $totalEUR = $totalUSD * $USD_TO_EUR_DIF;

@@ -13,7 +13,7 @@
             <div class="card-header">
                 <h2 class="card-title">Account total :&nbsp;
                     <span class="values">
-                        {{ app.user.accountTotalValue|number_format(2, '.', ' ') }}{{ app.user.accountTotalValue == 'EUR' ? '€' : '$'}}
+                        {{ app.user.accountTotalValue|number_format(2, '.', ' ') }}$
                     </span>
                     &nbsp;
                     <span>
@@ -54,7 +54,7 @@
                             },
                             series: [
                                 {% for invest in investissements %}
-                                    {% if invest.devise == 'EUR' %}
+                                    {% if app.user.devise == 'EUR' %}
                                         {{ invest.totalValue * 0.82}},
                                     {% else %}
                                         {{ invest.totalValue }},

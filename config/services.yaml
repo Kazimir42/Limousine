@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    EUR_to_USD.global_param: 1.18
+    USD_to_EUR.global_param: 0.85
 services:
     # default configuration for services in *this* file
     _defaults:

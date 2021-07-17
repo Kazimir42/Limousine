@@ -42,6 +42,21 @@ class Row
      */
     private $investAttach;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $devise;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $ValueUSD;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $TotalValueUSD;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +118,42 @@ class Row
     public function setInvestAttach(?Investissement $investAttach): self
     {
         $this->investAttach = $investAttach;
+
+        return $this;
+    }
+
+    public function getDevise(): ?string
+    {
+        return $this->devise;
+    }
+
+    public function setDevise(?string $devise): self
+    {
+        $this->devise = $devise;
+
+        return $this;
+    }
+
+    public function getValueUSD(): ?float
+    {
+        return $this->ValueUSD;
+    }
+
+    public function setValueUSD(?float $ValueUSD): self
+    {
+        $this->ValueUSD = $ValueUSD;
+
+        return $this;
+    }
+
+    public function getTotalValueUSD(): ?float
+    {
+        return $this->TotalValueUSD;
+    }
+
+    public function setTotalValueUSD(?float $TotalValueUSD): self
+    {
+        $this->TotalValueUSD = $TotalValueUSD;
 
         return $this;
     }
