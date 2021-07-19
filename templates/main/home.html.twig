@@ -54,12 +54,7 @@
                             },
                             series: [
                                 {% for invest in investissements %}
-                                    {% if app.user.devise == 'EUR' %}
-                                        {{ invest.totalValue * 0.82}},
-                                    {% else %}
-                                        {{ invest.totalValue }},
-                                    {% endif %}
-
+                                    {{ invest.totalValue }},
                                 {% endfor %}
                             ],
                             labels: [

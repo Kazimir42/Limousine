@@ -16,48 +16,80 @@
             <div class="card-body">
                 {{ form_start(rowUpdateForm) }}
                 <div class="form-group mb-3 ">
+                    <label class="form-label">Type</label>
+                    <div>
+                        <input type="text" id="row_update_type" name="" required="required" maxlength="50" class="form-control" readonly="readonly" value="{{ row.type }}">
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
                         <label class="form-label">Name</label>
                         <div>
-                            {{ form_widget(rowUpdateForm.name, {'attr': {'class': 'form-control'}}) }}
-                            <small class="form-hint">Description to write</small>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3 ">
-                        <label class="form-label">Quantity</label>
-                        <div>
-                            {{ form_widget(rowUpdateForm.number, {'attr': {
+                            {{ form_widget(rowUpdateForm.name, {'attr': {
                                 'class': 'form-control',
-                                'oninput': 'calcTotalValue()'
                             }}) }}
-                            <small class="form-hint">Description to write</small>
+                            <small class="form-hint">The name</small>
+                        </div>
+                </div>
+                {% if(row.type == "OTHER") %}
 
+                {% else %}
+                    <div class="form-group mb-3" id="">
+                        <label class="form-label">Symbol</label>
+                        <div id="container-input-symbol">
+                            <input type="text" id="row_update_symbol" name="" class="form-control" readonly="readonly" value="{{ row.symbol }}">
                         </div>
                     </div>
-                    <div class="form-group mb-3 ">
-                        <label class="form-label">Value (one)</label>
-                        <div>
+                {% endif %}
+
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Quantity</label>
+                    <div>
+                        {{ form_widget(rowUpdateForm.number, {'attr': {
+                            'class': 'form-control',
+                            'oninput': 'calcTotalValue()',
+                        }}) }}
+                        <small class="form-hint">Description to write</small>
+
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Value (one)</label>
+                    <div>
+                        {% if row.type == "OTHER" %}
                             {{ form_widget(rowUpdateForm.value, {'attr': {
-                                'class': 'form-select',
-                                'oninput': 'calcTotalValue()'
+                                'class': 'form-control',
+                                'oninput': 'calcTotalValue()',
                             }}) }}
-                        </div>
+                        {% else %}
+                            {{ form_widget(rowUpdateForm.value, {'attr': {
+                                'class': 'form-control',
+                                'readonly': 'readonly',
+                            }}) }}
+                        {% endif %}
                     </div>
-                    <div class="form-group mb-3 ">
-                        <label class="form-label">Total value</label>
-                        <div>
-                            {{ form_widget(rowUpdateForm.totalValue, {'attr': {'class': 'form-select'}}) }}
-                        </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Total value</label>
+                    <div>
+                        {{ form_widget(rowUpdateForm.totalValue, {'attr': {
+                            'class': 'form-control',
+                            'readonly': 'readonly',
+                        }}) }}
                     </div>
-                    <div class="form-group mb-3 ">
-                        <label class="form-label">Currency</label>
-                        <div>
-                            {{ form_widget(rowUpdateForm.devise, {'attr': {'class': 'form-select'}}) }}
-                        </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Currency</label>
+                    <div>
+                        {{ form_widget(rowUpdateForm.devise, {'attr': {
+                            'class': 'form-select',
+                            'readonly': 'readonly',
+                        }}) }}
                     </div>
-                    <div class="form-footer">
-                        <button class="btn btn-primary">Update</button>
-                        <a href="{{ path('investissement_view', {'id': investissements.id}) }}" class="btn btn-white">Cancel</a>
-                    </div>
+                </div>
+                <div class="form-footer">
+                    <button class="btn btn-primary">Update</button>
+                    <a href="{{ path('investissement_view', {'id': investissements.id}) }}" class="btn btn-white">Cancel</a>
+                </div>
                 {{ form_end(rowUpdateForm) }}
             </div>
         </div>
@@ -67,7 +99,13 @@
 
 <script>
 
+    function unReadOnly(){
+
+    }
+
     function calcTotalValue(){
+
+        console.log("dfsdf")
 
         let numberOf = document.getElementById("row_update_number").value;
         let valueOne = document.getElementById("row_update_value").value;

@@ -57,6 +57,16 @@ class Row
      */
     private $TotalValueUSD;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $Symbol;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +164,30 @@ class Row
     public function setTotalValueUSD(?float $TotalValueUSD): self
     {
         $this->TotalValueUSD = $TotalValueUSD;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSymbol(): ?string
+    {
+        return $this->Symbol;
+    }
+
+    public function setSymbol(?string $Symbol): self
+    {
+        $this->Symbol = $Symbol;
 
         return $this;
     }

@@ -14,12 +14,59 @@
                 <h3 class="card-title">Add a new Row for <a href="{{ path('investissement_view', {'id': investissements.id}) }}">{{ investissements.name }}</a> </h3>
             </div>
             <div class="card-body">
-                {{ form_start(rowForm) }}
                 <div class="form-group mb-3 ">
-                        <label class="form-label">Name</label>
+                    <label class="form-label">Type of row to create</label>
+                    <button  type="button" onclick="displayStockForm(); hydrateType(this)" class="btn btn-primary btn-choosable-type">
+                        STOCK
+                    </button>
+                    <button  type="button" onclick="displayEtfForm(); hydrateType(this)" class="btn btn-primary btn-choosable-type">
+                        ETF
+                    </button>
+                    <button  type="button" onclick="displayCryptoForm(); hydrateType(this)" class="btn btn-primary btn-choosable-type">
+                        CRYPTO
+                    </button>
+                    <button  type="button" onclick="displayBasicForm(); hydrateType(this)" class="btn btn-primary btn-choosable-type">
+                        OTHER
+                    </button>
+                </div>
+
+                <div id="rowForm">
+                    {{ form_start(rowForm) }}
+
+                    {# all hidden input #}
+
+                    {{ form_widget(rowForm.type) }}
+                    {{ form_widget(rowForm.symbol) }}
+
+
+
+                    {# SEARCH #}
+                    <div id="container-search" class="form-group mb-3 ">
+                        <label id="label-toSearch" class="form-label">To search</label>
                         <div>
-                            {{ form_widget(rowForm.name, {'attr': {'class': 'form-control'}}) }}
-                            <small class="form-hint">Description to write</small>
+                            <input type="text" id="row_search" maxlength="255" class="form-control">
+                        </div>
+                        <small id="desc-search" class="form-hint">Name or Symbol</small>
+                    </div>
+
+                    {# RESULT #}
+                    <div id="container-result" class="form-group mb-3 ">
+                        <label class="form-label">Result</label>
+                        <div>
+                            <select id="row_result" class="form-select" oninput="hydrateOtherInput()">
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3 ">
+                        <label class="form-label">Name</label>
+                        <div id="container-input-name">
+                            {{ form_widget(rowForm.name, {'attr': {
+                                'class': 'form-control',
+                                'disabled': 'disabled'
+                            }}) }}
+                            <small id="desc-name" class="form-hint">Description to write</small>
                         </div>
                     </div>
                     <div class="form-group mb-3 ">
@@ -27,38 +74,46 @@
                         <div>
                             {{ form_widget(rowForm.number, {'attr': {
                                 'class': 'form-control',
-                                'oninput': 'calcTotalValue()'
+                                'oninput': 'calcTotalValue()',
+                                'disabled': 'disabled',
                             }}) }}
                             <small class="form-hint">Description to write</small>
-
                         </div>
                     </div>
                     <div class="form-group mb-3 ">
                         <label class="form-label">Value (one)</label>
                         <div>
                             {{ form_widget(rowForm.value, {'attr': {
-                                'class': 'form-select',
-                                'oninput': 'calcTotalValue()'
+                                'class': 'form-control',
+                                'oninput': 'calcTotalValue()',
+                                'readonly': 'readonly',
                             }}) }}
                         </div>
                     </div>
                     <div class="form-group mb-3 ">
                         <label class="form-label">Total value</label>
                         <div>
-                            {{ form_widget(rowForm.totalValue, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_widget(rowForm.totalValue, {'attr': {
+                                'class': 'form-control',
+                                'readonly': 'readonly',
+                            }}) }}
                         </div>
                     </div>
                     <div class="form-group mb-3 ">
                         <label class="form-label">Currency</label>
-                        <div>
-                            {{ form_widget(rowForm.devise, {'attr': {'class': 'form-select'}}) }}
+                        <div id="container-input-devise">
+                            {{ form_widget(rowForm.devise, {'attr': {
+                                'class': 'form-select',
+                                'disabled': 'disabled',
+                            }}) }}
                         </div>
                     </div>
                     <div class="form-footer">
                         <button class="btn btn-primary">Create</button>
                         <a href="{{ path('investissement_view', {'id': investissements.id}) }}" class="btn btn-white">Cancel</a>
                     </div>
-                {{ form_end(rowForm) }}
+                    {{ form_end(rowForm) }}
+                </div>
             </div>
         </div>
     </div>
@@ -66,7 +121,7 @@
 
 
 
-
+    <script src="{{ asset("js/rowType.js") }}"></script>
     <script>
 
         function calcTotalValue(){
@@ -80,7 +135,6 @@
 
             totalValue.value = total;
         }
-
 
 
     </script>

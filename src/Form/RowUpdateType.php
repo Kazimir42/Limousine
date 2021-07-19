@@ -14,9 +14,9 @@ class RowUpdateType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('number')
             ->add('value')
             ->add('totalValue')
-            ->add('number')
             ->add('devise', ChoiceType::class, [
                 'choices' => [
                     'USD' => 'USD',

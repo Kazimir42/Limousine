@@ -26,7 +26,7 @@ class RowController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('row/index.html.twig', [
+        return $this->render('row/stock.html.twig', [
             'controller_name' => 'RowController',
         ]);
     }

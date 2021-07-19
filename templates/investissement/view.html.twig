@@ -72,6 +72,7 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Type</th>
                         <th>Quantity</th>
                         <th>Value (one)</th>
                         <th>Total value</th>
@@ -83,6 +84,9 @@
                         {% set nb = loop.index %}
                     <tr>
                         <td>{{row.name|upper}}</td>
+                        <td class="">
+                            {{ row.type }}
+                        </td>
                         <td class="">
                             {{ row.number }}
                         </td>
