@@ -12,12 +12,14 @@ class GetCurrencyChange
     private $client;
     private $currencyChange;
     private $entityManager;
+    private $totalAccountValue;
 
-    public function __construct(HttpClientInterface $client, CurrencyChangeRepository $currencyChange, EntityManagerInterface $entityManager)
+    public function __construct(HttpClientInterface $client, CurrencyChangeRepository $currencyChange, EntityManagerInterface $entityManager, UpdateTotalAccountValue $totalAccountValue)
     {
         $this->client = $client;
         $this->currencyChange = $currencyChange;
         $this->entityManager = $entityManager;
+        $this->totalAccountValue = $totalAccountValue;
     }
 
     public function getExchangeRateUSDToEUR(){
@@ -36,6 +38,7 @@ class GetCurrencyChange
         $currentCurrency->setRateValue($arrayValue[0]["Realtime Currency Exchange Rate"]["5. Exchange Rate"]);
 
         $this->currencyChange->updateChangeCurrency($currentCurrency->getCurrencyFrom(), $currentCurrency->getCurrencyTo(), $currentCurrency->getRateValue());
+
     }
 
     public function getExchangeRateEURToUSD(){
@@ -54,6 +57,9 @@ class GetCurrencyChange
         $currentCurrency->setRateValue($arrayValue[0]["Realtime Currency Exchange Rate"]["5. Exchange Rate"]);
 
         $this->currencyChange->updateChangeCurrency($currentCurrency->getCurrencyFrom(), $currentCurrency->getCurrencyTo(), $currentCurrency->getRateValue());
+
+        //update price in db
+        $this->totalAccountValue->updateTotalValueAllUser();
     }
 
 

@@ -64,9 +64,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $accountTotalValue;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Historical::class, mappedBy="user")
+     */
+    private $historicals;
+
     public function __construct()
     {
         $this->investissements = new ArrayCollection();
+        $this->historicals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +238,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAccountTotalValue(?float $accountTotalValue): self
     {
         $this->accountTotalValue = $accountTotalValue;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Historical[]
+     */
+    public function getHistoricals(): Collection
+    {
+        return $this->historicals;
+    }
+
+    public function addHistorical(Historical $historical): self
+    {
+        if (!$this->historicals->contains($historical)) {
+            $this->historicals[] = $historical;
+            $historical->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistorical(Historical $historical): self
+    {
+        if ($this->historicals->removeElement($historical)) {
+            // set the owning side to null (unless already changed)
+            if ($historical->getUser() === $this) {
+                $historical->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Calcul\CalcBdd;
 use App\Entity\Investissement;
 use App\Entity\User;
 use App\Form\InvestissementDeleteType;
@@ -10,6 +9,8 @@ use App\Form\InvestissementEditType;
 use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
+use App\Service\GetAccountTotalValue;
+use App\Service\UpdateTotalAccountValue;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,7 +114,7 @@ class InvestissementController extends AbstractController
     /**
      * @Route("/{id}/delete", name="delete")
      */
-    public function delete(int $id, InvestissementRepository $investissementRepository, Request $request, EntityManagerInterface $entityManager, RowRepository $rowRepository): Response
+    public function delete(int $id, InvestissementRepository $investissementRepository, Request $request, EntityManagerInterface $entityManager, RowRepository $rowRepository, GetAccountTotalValue $accountTotalValue, UpdateTotalAccountValue $totalAccountValue): Response
     {
         $invest = $investissementRepository->find($id);
 
@@ -136,6 +137,10 @@ class InvestissementController extends AbstractController
             //delete invest from db
             $entityManager->remove($invest);
             $entityManager->flush();
+
+            //update total value of account and push in historical
+            $totalAccountValue->updateTotalValue();
+
 
             $this->addFlash('success','invest delete');
             return $this->redirectToRoute('main_home');

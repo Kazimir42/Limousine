@@ -124,8 +124,12 @@
                                 curve: "smooth",
                             },
                             series: [{
-                                name: "total value",
-                                data: [0, 10, 30, 70]
+                                name: "Account total",
+                                data: [
+                                    {% for history in historys %}
+                                    {{ history.value }},
+                                    {% endfor %}
+                                ]
                             }],
                             grid: {
                                 padding: {
@@ -154,7 +158,9 @@
                                 },
                             },
                             labels: [
-                                '2018', '2019', '2020', '2021'
+                                {% for history in historys %}
+                                '{{ history.date|date("d/m/Y") }}',
+                                {% endfor %}
                             ],
                             colors: ["#206bc4", "#a55eea"],
                             legend: {
