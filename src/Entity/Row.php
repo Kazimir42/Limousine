@@ -33,7 +33,7 @@ class Row
     private $totalValue;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $number;
 
@@ -108,12 +108,12 @@ class Row
         return $this;
     }
 
-    public function getNumber(): ?int
+    public function getNumber(): ?float
     {
         return $this->number;
     }
 
-    public function setNumber(int $number): self
+    public function setNumber(float $number): self
     {
         $this->number = $number;
 

@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Crypto;
+use App\Repository\CryptoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CallApiController extends AbstractController
@@ -17,7 +20,6 @@ class CallApiController extends AbstractController
     public function stockSearch(Request $request, HttpClientInterface $client): Response
     {
         $theSymbol = $request->query->get('symbol');
-        dump($theSymbol);
 
         $response = $client->request(
             'GET',
@@ -45,7 +47,6 @@ class CallApiController extends AbstractController
         }
 
         return new JsonResponse($data);
-
     }
 
     /**
@@ -54,7 +55,6 @@ class CallApiController extends AbstractController
     public function stockPrice(Request $request, HttpClientInterface $client): Response
     {
         $theSymbol = $request->query->get('symbol');
-        dump($theSymbol);
 
         $response = $client->request(
             'GET',
@@ -76,7 +76,6 @@ class CallApiController extends AbstractController
     public function ETFSearch(Request $request, HttpClientInterface $client): Response
     {
         $theSymbol = $request->query->get('symbol');
-        dump($theSymbol);
 
         $response = $client->request(
             'GET',
@@ -104,13 +103,20 @@ class CallApiController extends AbstractController
         }
 
         return new JsonResponse($data);
-
     }
 
 
 
+    /**
+     * @Route("/call/api/crypto/search", name="call_api_crypto_symbol_search")
+     */
+    public function cryptoSearch(Request $request, HttpClientInterface $client, CryptoRepository $cryptoRepository, SerializerInterface $serializer): Response
+    {
+        $theSymbol = $request->query->get('symbol');
+        $cryptos = $cryptoRepository->searchByName($theSymbol);
+        $data = $serializer->serialize($cryptos, 'json');
 
-
-
+        return new JsonResponse($data, 200, [], true);
+    }
 
 }

@@ -29,7 +29,5 @@ class ETFRepository extends ServiceEntityRepository
             ->setParameter('symbol', $etf->getSymbol())
             ->getQuery();
         $query->execute();
-
-
     }
 }

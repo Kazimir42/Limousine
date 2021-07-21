@@ -80,10 +80,17 @@
                 <div class="form-group mb-3 ">
                     <label class="form-label">Currency</label>
                     <div>
-                        {{ form_widget(rowUpdateForm.devise, {'attr': {
-                            'class': 'form-select',
-                            'readonly': 'readonly',
-                        }}) }}
+                        {% if row.type == "OTHER" %}
+                            {{ form_widget(rowUpdateForm.devise, {'attr': {
+                                'class': 'form-select',
+                                'readonly': 'readonly',
+                            }}) }}
+                        {% else %}
+                            {{ form_widget(rowUpdateForm.devise, {'attr': {
+                                'class': 'form-select',
+                                'disabled': 'disabled',
+                            }}) }}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="form-footer">

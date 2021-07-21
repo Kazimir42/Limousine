@@ -26,7 +26,7 @@ function displayEtfForm(){
 
 function displayCryptoForm(){
     let theForm = document.getElementById("rowForm");
-    theForm.style.display = "none";
+    theForm.style.display = "inherit";
     document.getElementById("label-toSearch").innerText = "Crypto to search"
 
     clearForm();
@@ -226,6 +226,156 @@ function getResponsETFs(){
 
 /**
  *
+ * @description: functions for crypto
+ *
+ **/
+
+function getCryptos(){
+    let formTypeValue = document.getElementById("row_search").value;
+
+    //icone de cahrgement
+    let inputResult = document.getElementById("row_result");
+    inputResult.innerHTML = '<option value="NULL">Loading...</option>';
+    let req = new XMLHttpRequest();
+    req.open("GET", "/limousine/public/call/api/crypto/search?symbol=" + formTypeValue, true);
+    req.onload = getResponseCryptos;
+    req.send();
+}
+
+
+function getResponseCryptos(){
+
+    let datas = JSON.parse(this.responseText);
+
+
+    let arrayCryptoInfo = [];
+
+        for (let i = 0; i < datas.length; i++) {
+            let array = [];
+
+            array.push(datas[i].symbol)
+            array.push(datas[i].name)
+            array.push(datas[i].nameId)
+
+            arrayCryptoInfo.push(array)
+        }
+
+
+    updateBaseInputCrypto(arrayCryptoInfo);
+
+}
+
+
+function updateBaseInputCrypto(arrayInfo){
+
+    let inputResult = document.getElementById("row_result");
+
+    inputResult.removeAttribute("readonly");
+    inputResult.removeAttribute("disabled");
+
+
+    inputResult.innerHTML = '<option value="NULL">CHOOSE ONE</option>'
+    for(const key in arrayInfo){
+        inputResult.innerHTML += '<option value="' + arrayInfo[key][0].toUpperCase() + '">' + arrayInfo[key][1] + ' | ' + arrayInfo[key][0].toUpperCase() + ' | ' + arrayInfo[key][2] + '</option>'
+    }
+
+    let rowSelect = document.getElementById("row_result");
+    rowSelect.removeAttribute("oninput");
+    rowSelect.setAttribute("oninput","hydrateOtherInputCrypto()");
+}
+
+
+
+function hydrateOtherInputCrypto(){
+    //get value from input and make it an array
+    let selectedStockOrEtf = document.getElementById("row_result");
+    let infos = selectedStockOrEtf.options[selectedStockOrEtf.selectedIndex].text;
+    let infoArray = infos.split(' | ');
+
+    //now get input and hydrate then
+    //let containerCurrency = document.getElementById("container-input-devise");
+    //containerCurrency.innerHTML = '<input type="text" id="row_devise" name="row[devise]" required="required" class="form-control" readOnly="readonly">'
+    //let formCurrency = document.getElementById("row_devise");
+    //formCurrency.value = infoArray[3];
+
+
+    let formSymbol = document.getElementById("row_symbol");
+
+    let formName = document.getElementById("row_name");
+    formName.removeAttribute("disabled");
+
+    formSymbol.value = infoArray[1];
+
+    getValueForThisSymbolCrypto(infoArray[2])
+}
+
+
+function getValueForThisSymbolCrypto(currentName){
+
+
+    let inputValue = document.getElementById("row_value");
+    let inputTotalValue = document.getElementById("row_totalValue");
+    let inputQuantity = document.getElementById("row_number");
+
+    //CLEAR INPUT BEFORE LOADING
+    inputQuantity.value = "";
+    inputValue.value = "";
+    inputTotalValue.value = "";
+
+    //LOADING VALUE
+    inputValue.value = "Loading...";
+
+
+    let req = new XMLHttpRequest();
+    req.open("GET", "https://api.coingecko.com/api/v3/coins/" + currentName, true);
+    req.onload = getCryptoPrice;
+    req.send();
+}
+
+function getCryptoPrice(){
+
+    if (typeof data == 'undefined'){
+        data = JSON.parse(this.responseText);
+    }
+
+
+    let rowCurrency = document.getElementById("row_devise");
+    rowCurrency.removeAttribute("disabled");
+    let currencySelect = rowCurrency.value;
+
+    let inputQuantity = document.getElementById("row_number");
+    inputQuantity.removeAttribute("disabled");
+
+
+    let thePrice = 0;
+    console.log(currencySelect);
+
+    if (currencySelect === "USD"){
+        thePrice = data.market_data.current_price.usd;
+    }else if(currencySelect === "EUR"){
+        thePrice = data.market_data.current_price.eur;
+    }else{
+        thePrice = data.market_data.current_price.usd;
+        rowCurrency.value = "USD";
+    }
+
+    thePrice = Number(thePrice).toFixed(2);
+
+
+    rowCurrency.setAttribute("oninput","changeValue(); calcTotalValue()")
+
+    updateValueInput(thePrice);
+}
+
+function changeValue(){
+    getCryptoPrice();
+}
+
+
+
+
+/**
+ *
  * @description: functions for Stocks and ETFs
  *
  **/
@@ -242,6 +392,10 @@ function updateBaseInput(arrayInfo){
     for(const key in arrayInfo){
         inputResult.innerHTML += '<option value="' + arrayInfo[key][0] + '">' + arrayInfo[key][1] + ' | ' + arrayInfo[key][0] + ' | ' + arrayInfo[key][2] + ' | ' + arrayInfo[key][3] + '</option>'
     }
+
+    let rowSelect = document.getElementById("row_result");
+    rowSelect.removeAttribute("oninput");
+    rowSelect.setAttribute("oninput","hydrateOtherInput()");
 
 }
 

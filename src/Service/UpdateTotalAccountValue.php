@@ -50,6 +50,7 @@ class UpdateTotalAccountValue{
 
         $user->setAccountTotalValue($totalValue);
 
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

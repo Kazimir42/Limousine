@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Crypto;
 use App\Entity\ETF;
 use App\Entity\Investissement;
 use App\Entity\Row;
@@ -9,6 +10,7 @@ use App\Entity\Stock;
 use App\Form\RowDeleteType;
 use App\Form\RowType;
 use App\Form\RowUpdateType;
+use App\Repository\CryptoRepository;
 use App\Repository\CurrencyChangeRepository;
 use App\Repository\ETFRepository;
 use App\Repository\InvestissementRepository;
@@ -93,7 +95,8 @@ class RowController extends AbstractController
         CurrencyChangeRepository $currencyChangeRepository,
         StockRepository $stockRepository,
         ETFRepository $ETFRepository,
-        UpdateTotalAccountValue $totalAccountValue
+        UpdateTotalAccountValue $totalAccountValue,
+        CryptoRepository $cryptoRepository
     ): Response
     {
         $invest = $investissementRepository->find($id);
@@ -166,10 +169,10 @@ class RowController extends AbstractController
                     $etf->setValue($row->getValue());
                     $etf->setDevise($row->getDevise());
 
-                    //GET THE STOCK
+                    //GET THE ETF
                     $etfExist = $ETFRepository->findOneBy(array('symbol' => $row->getSymbol()));
 
-                    //CHECK IF STOCK ALREADY EXSITE
+                    //CHECK IF ETG ALREADY EXSITE
                     if (is_null($etfExist)){
                         //CREATE HIM
                         $entityManager->persist($etf);
@@ -185,10 +188,25 @@ class RowController extends AbstractController
                     }
                     break;
                 case "CRYPTO":
-                    dd($row);
-                    /*
-                     * @todo: gérer la crypto
-                     */
+
+                    $crypto = new Crypto();
+                    $crypto->setName($row->getName());
+                    $crypto->setSymbol($row->getSymbol());
+
+                    if ($row->getDevise() == "USD"){
+
+                        $crypto->setValueUsd($row->getValue());
+                        //UPDATE CRYPTO IN DB
+                        $cryptoRepository->updateCryptoUSDBySymbol($crypto);
+
+                    }elseif ($row->getDevise() == "EUR"){
+
+                        $crypto->setValueEur($row->getValue());
+                        //UPDATE CRYPTO IN DB
+                        $cryptoRepository->updateCryptoEURBySymbol($crypto);
+
+                    }
+
                     break;
                 case "OTHER":
                     $entityManager->persist($row);
