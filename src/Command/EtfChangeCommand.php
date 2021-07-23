@@ -21,7 +21,7 @@ class EtfChangeCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Update all ETFs');
+        $this->setDescription('Update orlder ETF');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

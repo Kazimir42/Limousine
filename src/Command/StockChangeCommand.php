@@ -22,7 +22,7 @@ class StockChangeCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Update all ETFs');
+        $this->setDescription('Update older stock');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
