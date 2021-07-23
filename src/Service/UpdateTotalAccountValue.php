@@ -96,4 +96,37 @@ class UpdateTotalAccountValue{
     }
 
 
+    public function updateTotalValueSpecificUser($user){
+
+            $invests = $this->investissementRepository->findAllByUserId($user);
+
+            $totalValue = 0;
+            $totalValueForInvest = 0;
+
+            foreach ($invests as $invest) {
+                $totalValueForInvest = 0;
+                $rows = $this->rowRepository->findAllByInvestId($invest);
+
+                foreach ($rows as $row) {
+                    $totalValue += $row->getTotalValueUSD();
+                    $totalValueForInvest += $row->getTotalValueUSD();
+                }
+                $invest->setTotalValue($totalValueForInvest);
+                $this->entityManager->persist($invest);
+                $this->entityManager->flush();
+
+            }
+
+            $user->setAccountTotalValue($totalValue);
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+
+            //when total value is update for user so save the new total value in table historical from db
+            $this->accountTotalValue->getAndPushTotalAccountValueSpecificUser($user);
+
+    }
+
+
 }

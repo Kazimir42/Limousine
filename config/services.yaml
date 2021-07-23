@@ -6,6 +6,7 @@
 parameters:
     EUR_to_USD.global_param: 1.18
     USD_to_EUR.global_param: 0.85
+    API_KEY: 
 services:
     # default configuration for services in *this* file
     _defaults:

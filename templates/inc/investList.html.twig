@@ -22,7 +22,6 @@
                     <th>Risk</th>
                     <th>Created</th>
                     <th>Last add</th>
-                    <th>Status (1y)</th>
                     <th>Total Value</th>
                     <th></th>
                 </tr>
@@ -50,13 +49,7 @@
                         <td>
                             {{ invest.lastModif|date('d/m/Y') }}
                         </td>
-                        <td>
-                            {% if invest.statut == 1 %}
-                                <span class="badge bg-success me-1">
-                                        UP
-                                    </span>
-                            {% endif %}
-                        </td>
+
                         <td>{{ invest.totalValue|number_format(2, '.', ' ') }}{{ app.user.devise == 'EUR' ? '€' : '$'}}</td>
 
                         <td class="text-end">

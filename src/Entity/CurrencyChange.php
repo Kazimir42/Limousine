@@ -32,6 +32,11 @@ class CurrencyChange
      */
     private $rateValue;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updated_at;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class CurrencyChange
     public function setRateValue(float $rateValue): self
     {
         $this->rateValue = $rateValue;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

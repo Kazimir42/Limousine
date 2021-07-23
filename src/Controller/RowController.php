@@ -193,7 +193,7 @@ class RowController extends AbstractController
                     $crypto->setName($row->getName());
                     $crypto->setSymbol($row->getSymbol());
 
-                    if ($row->getDevise() == "USD"){
+                    if ($row->getDevise() == "USD" || is_null($row->getDevise())){
 
                         $crypto->setValueUsd($row->getValue());
                         //UPDATE CRYPTO IN DB

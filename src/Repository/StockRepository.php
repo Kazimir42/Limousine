@@ -34,4 +34,16 @@ class StockRepository extends ServiceEntityRepository
 
 
     }
+
+    public function findOlders()
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->orderBy('s.updated_at', 'ASC');
+        $query = $queryBuilder->getQuery();
+        $results = $query->getResult();
+
+
+        return $results;
+    }
+
 }

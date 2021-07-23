@@ -7,6 +7,9 @@ use App\Repository\HistoricalRepository;
 use App\Repository\InvestissementRepository;
 use App\Service\AccountTotalMath;
 use App\Service\GetAccountTotalValue;
+use App\Service\GetCryptoChange;
+use App\Service\GetETFChange;
+use App\Service\GetStockChange;
 use App\Service\UpdateEURValues;
 use App\Service\UpdateTotalAccountValue;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +22,7 @@ class MainController extends AbstractController
     /**
      * @Route("/", name="main_home")
      */
-    public function home(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository): Response{
+    public function home(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository, GetETFChange $ETFChange, GetStockChange $stockChange, GetCryptoChange $cryptoChange): Response{
 
 
         //DISPLAY TOTAL VALUE IN USD
@@ -54,6 +57,9 @@ class MainController extends AbstractController
             $currentDateBeforeFormated = $currentDateTime->format('d/m/Y');
         }
 
+        //$ETFChange->getAndPushAllETF();
+        //$stockChange->getAndPushAllStock();
+        //$cryptoChange->getAndPushAllCrypto();
 
         return $this->render('main/home.html.twig', [
             "investissements" => $investissements,

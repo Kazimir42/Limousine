@@ -23,7 +23,7 @@ class CallApiController extends AbstractController
 
         $response = $client->request(
             'GET',
-            'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' . $theSymbol . '&apikey='
+            'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' . $theSymbol . '&apikey=' . $this->getParameter('API_KEY')
         //'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo'
         );
 
@@ -58,7 +58,7 @@ class CallApiController extends AbstractController
 
         $response = $client->request(
             'GET',
-            'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' . $theSymbol . '&apikey='
+            'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' . $theSymbol . '&apikey=' . $this->getParameter('API_KEY')
         //'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo'
         );
 
@@ -79,7 +79,7 @@ class CallApiController extends AbstractController
 
         $response = $client->request(
             'GET',
-            'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' . $theSymbol . '&apikey='
+            'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' . $theSymbol . '&apikey=' . $this->getParameter('API_KEY')
         //'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo'
         );
 

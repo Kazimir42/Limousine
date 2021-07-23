@@ -53,4 +53,17 @@ class CryptoRepository extends ServiceEntityRepository
         $query->execute();
     }
 
+    public function findAllNotNull()
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
+        $queryBuilder->where('c.valueUsd > 0');
+        $queryBuilder->orWhere('c.valueEur > 0');
+        $queryBuilder->orWhere('c.valueBtc > 0');
+        $queryBuilder->orWhere('c.valueEth > 0');
+        $query = $queryBuilder->getQuery();
+        $results = $query->getResult();
+
+        return $results;
+    }
+
 }

@@ -30,4 +30,16 @@ class ETFRepository extends ServiceEntityRepository
             ->getQuery();
         $query->execute();
     }
+
+    public function findOlders()
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+        $queryBuilder->orderBy('e.updated_at', 'ASC');
+        $query = $queryBuilder->getQuery();
+        $results = $query->getResult();
+
+        return $results;
+    }
+
+
 }
