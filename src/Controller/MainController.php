@@ -38,8 +38,6 @@ class MainController extends AbstractController
         $currentDateBeforeFormated = $currentDateBefore->format('d/m/Y');
 
 
-
-
         // FOR THE HISTORICAL CHART
         $nawArrayHistorys = [];
         $i = -1;

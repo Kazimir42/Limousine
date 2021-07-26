@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 /**
- * @Route("/investissement", name="investissement_")
+ * @Route("/investment", name="investissement_")
  */
 class InvestissementController extends AbstractController
 {
@@ -30,7 +30,7 @@ class InvestissementController extends AbstractController
 
         $investissements = $investissementRepository->findAllByUserId($user);
 
-        return $this->render('investissement/home.html.twig', [
+        return $this->render('investment/home.html.twig', [
             "investissements" => $investissements
         ]);
     }
@@ -63,7 +63,7 @@ class InvestissementController extends AbstractController
 
         }
 
-        return $this->render('investissement/create.html.twig', [
+        return $this->render('investment/create.html.twig', [
             'investissementForm' => $investForm->createView()
         ]);
     }
@@ -89,7 +89,7 @@ class InvestissementController extends AbstractController
             return $this->redirectToRoute('main_home');
         }
 
-        return $this->render('investissement/edit.html.twig', [
+        return $this->render('investment/edit.html.twig', [
             "investissement" => $invest,
             "investEditForm" => $investEditForm->createView()
         ]);
@@ -105,7 +105,7 @@ class InvestissementController extends AbstractController
         $rows = $rowRepository->findAllByInvestId($invest);
 
 
-        return $this->render('investissement/view.html.twig', [
+        return $this->render('investment/view.html.twig', [
             "investissement" => $invest,
             "rows" => $rows
         ]);
@@ -148,7 +148,7 @@ class InvestissementController extends AbstractController
 
 
 
-        return $this->render('investissement/delete.html.twig', [
+        return $this->render('investment/delete.html.twig', [
             "investDeleteForm" => $investDeleteForm->createView(),
             "investissement" => $invest
         ]);

@@ -35,7 +35,7 @@ class AccountTotalMath extends AbstractController
         foreach ($investissements as $invest){
             $currentDevise = $user->getDevise();
             if ($currentDevise == "EUR"){
-                $totalEUR = $invest->getTotalValue(); //le total en EUR de cette investissement
+                $totalEUR = $invest->getTotalValue(); //le total en EUR de cette investment
                 $totalUSD = $totalEUR * $EUR_TO_USD_DIF;
                 $totalU += $totalUSD;
             }else{
@@ -58,7 +58,7 @@ class AccountTotalMath extends AbstractController
         foreach ($investissements as $invest){
             $currentDevise = $user->getDevise();
             if ($currentDevise == "USD"){
-                $totalUSD = $invest->getTotalValue(); //le total en EUR de cette investissement
+                $totalUSD = $invest->getTotalValue(); //le total en EUR de cette investment
                 $totalEUR = $totalUSD * $USD_TO_EUR_DIF;
                 $totalE += $totalEUR;
             }else{

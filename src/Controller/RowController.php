@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("investissement/{id}/row", name="row_")
+ * @Route("investment/{id}/row", name="row_")
  */
 class RowController extends AbstractController
 {
@@ -261,7 +261,7 @@ class RowController extends AbstractController
         return $this->render('row/delete.html.twig', [
             'rowDeleteForm' => $rowDeleteForm->createView(),
             'row' => $row,
-            'investissement' => $invest
+            'investment' => $invest
         ]);
     }
 }

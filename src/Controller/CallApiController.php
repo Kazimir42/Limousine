@@ -65,7 +65,6 @@ class CallApiController extends AbstractController
         $data = $response->getContent();
         $data = json_decode($data, true);
 
-        dump($data);
         return new JsonResponse($data);
     }
 
