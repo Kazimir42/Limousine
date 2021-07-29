@@ -75,24 +75,30 @@ class InvestissementController extends AbstractController
     {
         $invest = $investissementRepository->find($id);
 
-        $investEditForm = $this->createForm(InvestissementEditType::class, $invest);
-        $investEditForm->handleRequest($request);
+        if ($this->getUser()->getId() == $invest->getUser()->getId()){
 
-        if ($investEditForm->isSubmitted() && $investEditForm->isValid()){
+            $investEditForm = $this->createForm(InvestissementEditType::class, $invest);
+            $investEditForm->handleRequest($request);
 
-            //$investissementRepository->update($invest);
+            if ($investEditForm->isSubmitted() && $investEditForm->isValid()){
 
-            $entityManager->persist($invest);
-            $entityManager->flush();
+                //$investissementRepository->update($invest);
 
-            $this->addFlash('success','invest edit');
-            return $this->redirectToRoute('main_home');
+                $entityManager->persist($invest);
+                $entityManager->flush();
+
+                $this->addFlash('success','invest edit');
+                return $this->redirectToRoute('main_home');
+            }
+
+            return $this->render('investment/edit.html.twig', [
+                "investissement" => $invest,
+                "investEditForm" => $investEditForm->createView()
+            ]);
+
+        }else{
+            throw $this->createAccessDeniedException();
         }
-
-        return $this->render('investment/edit.html.twig', [
-            "investissement" => $invest,
-            "investEditForm" => $investEditForm->createView()
-        ]);
     }
 
 
@@ -104,11 +110,16 @@ class InvestissementController extends AbstractController
         $invest = $investissementRepository->find($id);
         $rows = $rowRepository->findAllByInvestId($invest);
 
+        if ($this->getUser()->getId() == $invest->getUser()->getId()){
 
-        return $this->render('investment/view.html.twig', [
-            "investissement" => $invest,
-            "rows" => $rows
-        ]);
+            return $this->render('investment/view.html.twig', [
+                "investissement" => $invest,
+                "rows" => $rows
+            ]);
+
+        }else{
+            throw $this->createAccessDeniedException();
+        }
     }
 
     /**
@@ -118,39 +129,41 @@ class InvestissementController extends AbstractController
     {
         $invest = $investissementRepository->find($id);
 
+        if ($this->getUser()->getId() == $invest->getUser()->getId()){
 
-        $rows = $rowRepository->findAllByInvestId($invest->getId());
+            $rows = $rowRepository->findAllByInvestId($invest->getId());
 
+            $investDeleteForm = $this->createForm(InvestissementDeleteType::class, $invest);
+            $investDeleteForm->handleRequest($request);
 
-        $investDeleteForm = $this->createForm(InvestissementDeleteType::class, $invest);
-        $investDeleteForm->handleRequest($request);
+            if ($investDeleteForm->isSubmitted()){
 
+                //delete row from this invest (cause of FK KEY)
+                foreach ($rows as $row){
+                    $entityManager->remove($row);
+                    $entityManager->flush();
+                }
 
-        if ($investDeleteForm->isSubmitted()){
-
-            //delete row from this invest (cause of FK KEY)
-            foreach ($rows as $row){
-                $entityManager->remove($row);
+                //delete invest from db
+                $entityManager->remove($invest);
                 $entityManager->flush();
+
+                //update total value of account and push in historical
+                $totalAccountValue->updateTotalValue();
+
+                $this->addFlash('success','invest delete');
+                return $this->redirectToRoute('main_home');
             }
 
-            //delete invest from db
-            $entityManager->remove($invest);
-            $entityManager->flush();
+            return $this->render('investment/delete.html.twig', [
+                "investDeleteForm" => $investDeleteForm->createView(),
+                "investissement" => $invest
+            ]);
 
-            //update total value of account and push in historical
-            $totalAccountValue->updateTotalValue();
-
-
-            $this->addFlash('success','invest delete');
-            return $this->redirectToRoute('main_home');
+        }else{
+            throw $this->createAccessDeniedException();
         }
 
 
-
-        return $this->render('investment/delete.html.twig', [
-            "investDeleteForm" => $investDeleteForm->createView(),
-            "investissement" => $invest
-        ]);
     }
 }

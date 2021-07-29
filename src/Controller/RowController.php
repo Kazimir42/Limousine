@@ -44,44 +44,48 @@ class RowController extends AbstractController
      */
     public function update(int $id, int $rowId, Request $request, EntityManagerInterface $entityManager, InvestissementRepository $investissementRepository, RowRepository $rowRepository, CurrencyChangeRepository $currencyChangeRepository, UpdateTotalAccountValue $totalAccountValue): Response
     {
-        $invest = new Investissement();
         $invest = $investissementRepository->find($id);
 
+        if ($this->getUser()->getId() == $invest->getUser()->getId()){
 
-        $row = new Row();
-        $row = $rowRepository->find($rowId);
+            $row = $rowRepository->find($rowId);
 
-        $lastTotalRowValue = $row->getTotalValueUSD();
+            $lastTotalRowValue = $row->getTotalValueUSD();
 
-        $rowUpdateForm = $this->createForm(RowUpdateType::class, $row);
-        $rowUpdateForm->handleRequest($request);
+            $rowUpdateForm = $this->createForm(RowUpdateType::class, $row);
+            $rowUpdateForm->handleRequest($request);
 
-        if ($rowUpdateForm->isSubmitted() && $rowUpdateForm->isValid()){
+            if ($rowUpdateForm->isSubmitted() && $rowUpdateForm->isValid()){
 
-            if ($row->getDevise() == 'EUR'){
-                $row->setValueUSD($row->getValue() *  $currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue());
-                $row->setTotalValueUSD($row->getValueUSD() * $row->getNumber());
-            }else{
-                $row->setValueUSD($row->getValue());
-                $row->setTotalValueUSD($row->getTotalValue());
+                if ($row->getDevise() == 'EUR'){
+                    $row->setValueUSD($row->getValue() *  $currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue());
+                    $row->setTotalValueUSD($row->getValueUSD() * $row->getNumber());
+                }else{
+                    $row->setValueUSD($row->getValue());
+                    $row->setTotalValueUSD($row->getTotalValue());
+                }
+
+                $entityManager->persist($row);
+                $entityManager->flush();
+
+                //update price in db
+                $totalAccountValue->updateTotalValue();
+
+                $this->addFlash('success','row update');
+                return  $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
             }
 
-            $entityManager->persist($row);
-            $entityManager->flush();
 
-            //update price in db
-            $totalAccountValue->updateTotalValue();
+            return $this->render('row/update.html.twig', [
+                'investissements' => $invest,
+                'row' => $row,
+                'rowUpdateForm' => $rowUpdateForm->createView()
+            ]);
 
-            $this->addFlash('success','row update');
-            return  $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
+        }else{
+            throw $this->createAccessDeniedException();
         }
 
-
-        return $this->render('row/update.html.twig', [
-            'investissements' => $invest,
-            'row' => $row,
-            'rowUpdateForm' => $rowUpdateForm->createView()
-        ]);
     }
 
     /**
@@ -235,33 +239,37 @@ class RowController extends AbstractController
      */
     public function delete(int $id, int $rowId, Request $request, EntityManagerInterface $entityManager, InvestissementRepository $investissementRepository, RowRepository $rowRepository, UpdateTotalAccountValue $totalAccountValue): Response
     {
-        $invest = new Investissement();
         $invest = $investissementRepository->find($id);
 
-        $row = new Row();
-        $row = $rowRepository->find($rowId);
+        if ($this->getUser()->getId() == $invest->getUser()->getId()){
 
-        $rowDeleteForm = $this->createForm(RowDeleteType::class, $row);
-        $rowDeleteForm->handleRequest($request);
+            $row = $rowRepository->find($rowId);
 
-        if ($rowDeleteForm->isSubmitted()){
+            $rowDeleteForm = $this->createForm(RowDeleteType::class, $row);
+            $rowDeleteForm->handleRequest($request);
+
+            if ($rowDeleteForm->isSubmitted()){
 
 
-            //delete row from db
-            $entityManager->remove($row);
-            $entityManager->flush();
+                //delete row from db
+                $entityManager->remove($row);
+                $entityManager->flush();
 
-            //update price in db
-            $totalAccountValue->updateTotalValue();
+                //update price in db
+                $totalAccountValue->updateTotalValue();
 
-            $this->addFlash('success','row delete');
-            return $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
+                $this->addFlash('success','row delete');
+                return $this->redirectToRoute('investissement_view', ['id' => $invest->getId()]);
+            }
+
+            return $this->render('row/delete.html.twig', [
+                'rowDeleteForm' => $rowDeleteForm->createView(),
+                'row' => $row,
+                'investment' => $invest
+            ]);
+        }else{
+            throw $this->createAccessDeniedException();
         }
 
-        return $this->render('row/delete.html.twig', [
-            'rowDeleteForm' => $rowDeleteForm->createView(),
-            'row' => $row,
-            'investment' => $invest
-        ]);
     }
 }
