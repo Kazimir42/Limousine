@@ -19,15 +19,29 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({{ asset('avatars/' ~ app.user.avatar) }})"></span>
+                <div class="row" style="min-height: 200px">
+                    <div class="col-md-2">
+                        <span class="avatar avatar-xl" style="background-image: url({{ asset('avatars/' ~ app.user.avatar) }}) ; width: 100%; height: 200px"></span>
                     </div>
-                    <div class="col-md-9">
-                        {{ user.firstname }}<br />
-                        {{ user.lastname }}<br />
-                        {{ user.email }}<br />
-                        {{ user.devise }}<br />
+                    <div class="col-md-10">
+                        <table>
+                            <tr>
+                                <td style="min-width: 200px">Firstname : </td>
+                                <td class="font-weight-bold">{{ user.firstname }}</td>
+                            </tr>
+                            <tr>
+                                <td>Lastname : </td>
+                                <td class="font-weight-bold">{{ user.lastname }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email : </td>
+                                <td class="font-weight-bold">{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Account currency : </td>
+                                <td class="font-weight-bold">{{ user.devise }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 

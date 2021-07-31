@@ -7,6 +7,45 @@
 
     <h3>Coming soon :)</h3>
 
+    <div class="col-lg-6 col-xl-6 mb-3">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <div id="chart" class="chart"></div>
+                <script>
+
+                    var options = {
+                        series: [44, 55, 13],
+                        chart: {
+                            type: 'pie',
+                            fontFamily: 'inherit',
+                            height: 270,
+
+                            animations: {
+                                enabled: true
+                            },
+                        },
+                        labels: ['Safe', 'Balanced', 'Risky'],
+                        colors: ["#206bc4", "#79a6dc", "#d2e1f3", "#e9ecf1"],
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: 200
+                                },
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }]
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#chart"), options);
+                    chart.render();
+                </script>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block title %}{{ parent() }} | Stats{% endblock %}
