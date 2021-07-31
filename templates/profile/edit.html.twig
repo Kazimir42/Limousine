@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Edit Profile{% endblock %}
+
+{% block cath1 %}Profile {% endblock %}
+{% block h1 %}Edit {% endblock %}
+
+
+{% block body %}
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Edit profile</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Email</label>
+                    <div>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Firstname</label>
+                    <div>
+                        {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Lastname</label>
+                    <div>
+                        {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Account currency</label>
+                    <div>
+                        {{ form_widget(form.devise, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label">Profile picture (jpg or png)</label>
+                    <div>
+                        {{ form_widget(form.avatar, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn btn-primary">Edit</button>
+                    <a href="{{ path('main_home') }}" class="btn btn-white">Cancel</a>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

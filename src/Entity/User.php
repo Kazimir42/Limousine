@@ -65,6 +65,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $accountTotalValue;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
+
+    /**
      * @ORM\OneToMany(targetEntity=Historical::class, mappedBy="user")
      */
     private $historicals;
@@ -238,6 +243,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAccountTotalValue(?float $accountTotalValue): self
     {
         $this->accountTotalValue = $accountTotalValue;
+
+        return $this;
+    }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

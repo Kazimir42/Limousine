@@ -6,7 +6,9 @@
 parameters:
     EUR_to_USD.global_param: 1.18
     USD_to_EUR.global_param: 0.85
-    API_KEY: 3U34IBRSCLU02UYZ
+    API_KEY: 3U34IBRSCLU02UYZ   #free api key, u can take it if u want :)
+    pictures_directory: '%kernel.project_dir%/public/avatars'
+
 services:
     # default configuration for services in *this* file
     _defaults:

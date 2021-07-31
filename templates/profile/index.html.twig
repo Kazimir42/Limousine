@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Profile{% endblock %}
+
+{% block cath1 %}Profile {% endblock %}
+{% block h1 %}Home {% endblock %}
+
+
+{% block body %}
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ user.firstname }} {{ user.lastname|upper }}</h3>
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <a href="{{ path('profile_edit') }}" class="btn btn-primary">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({{ asset('avatars/' ~ app.user.avatar) }})"></span>
+                    </div>
+                    <div class="col-md-9">
+                        {{ user.firstname }}<br />
+                        {{ user.lastname }}<br />
+                        {{ user.email }}<br />
+                        {{ user.devise }}<br />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
