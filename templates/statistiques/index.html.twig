@@ -147,18 +147,16 @@
 
                     var options = {
                         series: [
+                            {% for oneInvest in investHistory %}
                             {
-                                name: 'South',
-                                data: [15, 40, 50],
+                                name: '{{ oneInvest[0].invest.name }}',
+                                data: [
+                                    {% for item in oneInvest %}
+                                    {{ item.value }},
+                                    {% endfor %}
+                                ],
                             },
-                            {
-                                name: 'North',
-                                data: [15, 25, 70],
-                            },
-                            {
-                                name: 'Central',
-                                data: [30, 80, 50],
-                            }
+                            {% endfor %}
                         ],
                         chart: {
                             type: 'area',
@@ -200,7 +198,11 @@
                             opposite: true
                         },
                         labels: [
-                            'a', 'b', 'c', 'd', 'e'
+                            {% for oneInvest in investHistory %}
+                                {% for item in oneInvest %}
+                                    '{{ item.date|date('d/m/y') }}',
+                                {% endfor %}
+                            {% endfor %}
                         ],
                     };
 

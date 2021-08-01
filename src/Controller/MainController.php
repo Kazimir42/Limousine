@@ -33,10 +33,8 @@ class MainController extends AbstractController
         //GET HISTORICAL DATA FORM THE CHART
         $historys = $historicalRepository->findBy(array('user' => $user));
 
-
         $currentDateBefore = new \DateTime('01/01/1900');
         $currentDateBeforeFormated = $currentDateBefore->format('d/m/Y');
-
 
         // FOR THE HISTORICAL CHART
         $nawArrayHistorys = [];

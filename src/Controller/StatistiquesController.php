@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\HistoricalInvestRepository;
 use App\Repository\HistoricalRepository;
 use App\Repository\InvestissementRepository;
 use App\Service\AccountTotalMath;
@@ -17,7 +18,7 @@ class StatistiquesController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository): Response
+    public function index(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository, HistoricalInvestRepository $historicalInvestRepository): Response
     {
 
         //DISPLAY TOTAL VALUE IN USD
@@ -50,6 +51,7 @@ class StatistiquesController extends AbstractController
         }
 
 
+        //FOR RISK CHART
         $datasRisk = [];
         $datasRisk['Safe'] = 0;
         $datasRisk['Balanced'] = 0;
@@ -71,11 +73,39 @@ class StatistiquesController extends AbstractController
             }
         }
 
+
+        //FOR HISTORICAL INVEST CHAT CHART
+        $bigInvestHistoryArray = [];
+        foreach ($investissements as $invest){
+            $historysInvest = $historicalInvestRepository->findBy(array('invest' => $invest));
+            $currentDateBefore = new \DateTime('01/01/1900');
+            $currentDateBeforeFormated = $currentDateBefore->format('d/m/Y');
+
+            $investHistoryArray = [];
+            $y = -1;
+            foreach ($historysInvest as $theInvest) {
+                $currentDateTime = $theInvest->getDate();
+                $currentDate = $currentDateTime->format('d/m/Y');
+
+                if ($currentDateBeforeFormated == $currentDate){
+                    $investHistoryArray[$y] = $theInvest;
+                }else{
+                    $y++;
+                    $investHistoryArray[$y] = $theInvest;
+                }
+                $currentDateBeforeFormated = $currentDateTime->format('d/m/Y');
+            }
+            $bigInvestHistoryArray[$invest->getName()] = $investHistoryArray;
+        }
+
+
+
         return $this->render('statistiques/index.html.twig', [
             "investissements" => $investissements,
             "bigTotalEur" => $bigTotalEur,
             "historys" => $nawArrayHistorys,
             "risks" => $datasRisk,
+            "investHistory" => $bigInvestHistoryArray,
         ]);
     }
 }

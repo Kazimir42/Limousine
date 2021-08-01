@@ -70,9 +70,15 @@ class Investissement
      */
     private $rows;
 
+    /**
+     * @ORM\OneToMany(targetEntity=HistoricalInvest::class, mappedBy="invest")
+     */
+    private $history;
+
     public function __construct()
     {
         $this->rows = new ArrayCollection();
+        $this->history = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,6 +218,36 @@ class Investissement
             // set the owning side to null (unless already changed)
             if ($row->getInvestAttach() === $this) {
                 $row->setInvestAttach(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HistoricalInvest[]
+     */
+    public function getHistory(): Collection
+    {
+        return $this->history;
+    }
+
+    public function addHistory(HistoricalInvest $history): self
+    {
+        if (!$this->history->contains($history)) {
+            $this->history[] = $history;
+            $history->setInvest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistory(HistoricalInvest $history): self
+    {
+        if ($this->history->removeElement($history)) {
+            // set the owning side to null (unless already changed)
+            if ($history->getInvest() === $this) {
+                $history->setInvest(null);
             }
         }
 

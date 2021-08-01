@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\HistoricalInvest;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
 use App\Repository\UserRepository;
@@ -36,6 +37,7 @@ class UpdateTotalAccountValue{
         $totalValueForInvest = 0;
 
         foreach ($invests as $invest){
+            $investHystory = new HistoricalInvest();
             $totalValueForInvest = 0;
             $rows = $this->rowRepository->findAllByInvestId($invest);
 
@@ -44,6 +46,14 @@ class UpdateTotalAccountValue{
                 $totalValueForInvest += $row->getTotalValueUSD();
             }
             $invest->setTotalValue($totalValueForInvest);
+
+            $investHystory->setDate(new \DateTime());
+            $investHystory->setInvest($invest);
+            $investHystory->setValue($totalValueForInvest);
+
+            $this->entityManager->persist($investHystory);
+            $this->entityManager->flush();
+
             $this->entityManager->persist($invest);
             $this->entityManager->flush();
         }
@@ -71,6 +81,8 @@ class UpdateTotalAccountValue{
             $totalValueForInvest = 0;
 
             foreach ($invests as $invest) {
+                $investHystory = new HistoricalInvest();
+
                 $totalValueForInvest = 0;
                 $rows = $this->rowRepository->findAllByInvestId($invest);
 
@@ -79,6 +91,14 @@ class UpdateTotalAccountValue{
                     $totalValueForInvest += $row->getTotalValueUSD();
                 }
                 $invest->setTotalValue($totalValueForInvest);
+
+                $investHystory->setDate(new \DateTime());
+                $investHystory->setInvest($invest);
+                $investHystory->setValue($totalValueForInvest);
+
+                $this->entityManager->persist($investHystory);
+                $this->entityManager->flush();
+
                 $this->entityManager->persist($invest);
                 $this->entityManager->flush();
             }
