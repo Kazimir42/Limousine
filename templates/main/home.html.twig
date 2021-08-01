@@ -44,6 +44,12 @@
                                     enabled: true
                                 },
                             },
+                            dataLabels: {
+                                enabled: true,
+                                dropShadow: {
+                                    enabled: true
+                                }
+                            },
                             fill: {
                                 opacity: 1,
                             },
@@ -87,7 +93,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6 col-xl-6">
+    <div class="col-lg-6 col-xl-6 mb-3">
         <div class="card">
             <div class="card-body" style="position: relative;">
                 <div id="chart-demo-area" class="chart-lg"></div>
@@ -148,8 +154,9 @@
                                 type: 'date',
                             },
                             yaxis: {
+                                opposite: true,
                                 labels: {
-                                    padding: 4
+                                    padding: 10
                                 },
                             },
                             labels: [

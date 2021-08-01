@@ -5,21 +5,111 @@
 
 {% block body %}
 
-    <h3>Coming soon :)</h3>
+    <div class="col-lg-12 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Account total :&nbsp;
+                    <span class="values">
+                        {{ app.user.accountTotalValue|number_format(2, '.', ' ') }}$
+                    </span>
+                    &nbsp;
+                    <span>
+                        ({{ bigTotalEur|number_format(2, '.', ' ') }}€)
+                    </span>
+                </h2>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12 col-xl-12 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Fundamental analysis of your account</h3>
+            </div>
+            <div class="card-body" style="position: relative;">
+                <div id="chart2" class="chart2"></div>
+                <script>
+                    var options = {
+                        series: [{
+                            name: "Account total",
+                            data: [
+                                {% for history in historys %}
+                                {{ history.value }},
+                                {% endfor %}
+                            ]
+                        }],
+                        chart: {
+                            type: 'area',
+                            height: 350,
+                            zoom: {
+                                enabled: false
+                            },
+                            toolbar: {
+                                show: false,
+                            },
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        fill: {
+                            opacity: .16,
+                            type: 'solid'
+                        },
+                        stroke: {
+                            width: 2,
+                            lineCap: "round",
+                            curve: 'smooth'
+                        },
+                        /*title: {
+                            text: 'Fundamental Analysis of Stocks',
+                            align: 'left'
+                        },
+                        subtitle: {
+                            text: 'Price Movements',
+                            align: 'left'
+                        },*/
+                        labels: [
+                            {% for history in historys %}
+                            '{{ history.date|date("d/m/Y") }}',
+                            {% endfor %}
+                        ],
+                        xaxis: {
+                            type: 'date',
+                        },
+                        yaxis: {
+                            opposite: true
+                        },
+                        colors: ["#206bc4", "#a55eea"],
+                        legend: {
+                            horizontalAlign: 'left'
+                        }
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#chart2"), options);
+                    chart.render();
+                </script>
+            </div>
+        </div>
+    </div>
 
     <div class="col-lg-6 col-xl-6 mb-3">
         <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Risk allocation</h3>
+            </div>
             <div class="card-body" style="position: relative;">
                 <div id="chart" class="chart"></div>
                 <script>
 
                     var options = {
-                        series: [44, 55, 13],
+                        series: [{{ risks['Safe'] }}, {{ risks['Balanced'] }}, {{ risks['Risky'] }}],
                         chart: {
                             type: 'pie',
                             fontFamily: 'inherit',
                             height: 270,
-
                             animations: {
                                 enabled: true
                             },
@@ -40,6 +130,81 @@
                     };
 
                     var chart = new ApexCharts(document.querySelector("#chart"), options);
+                    chart.render();
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-xl-6 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Analysis by investment</h3>
+            </div>
+            <div class="card-body" style="position: relative;">
+                <div id="chart3" class="chart3"></div>
+                <script>
+
+                    var options = {
+                        series: [
+                            {
+                                name: 'South',
+                                data: [15, 40, 50],
+                            },
+                            {
+                                name: 'North',
+                                data: [15, 25, 70],
+                            },
+                            {
+                                name: 'Central',
+                                data: [30, 80, 50],
+                            }
+                        ],
+                        chart: {
+                            type: 'area',
+                            height: 270,
+                            stacked: true,
+                            events: {
+                                selection: function (chart, e) {
+                                    console.log(new Date(e.xaxis.min))
+                                }
+                            },
+                            toolbar: {
+                                show: false,
+                            },
+                        },
+                        colors: ["#206bc4", "#79a6dc", "#d2e1f3", "#e9ecf1"],
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            width: 2,
+                            lineCap: "round",
+                            curve: 'smooth'
+                        },
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                opacityFrom: 0.6,
+                                opacityTo: 0.8,
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            horizontalAlign: 'left'
+                        },
+                        xaxis: {
+                            type: 'date'
+                        },
+                        yaxis: {
+                            opposite: true
+                        },
+                        labels: [
+                            'a', 'b', 'c', 'd', 'e'
+                        ],
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#chart3"), options);
                     chart.render();
                 </script>
             </div>
