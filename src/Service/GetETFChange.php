@@ -3,9 +3,8 @@
 namespace App\Service;
 
 
-use App\Entity\CurrencyChange;
-use App\Entity\Investissement;
-use App\Entity\User;
+use AlphaVantage\Client;
+use AlphaVantage\Options;
 use App\Repository\CurrencyChangeRepository;
 use App\Repository\ETFRepository;
 use App\Repository\InvestissementRepository;
@@ -26,8 +25,11 @@ class GetETFChange
     private $security;
     private $investissementRepository;
     private $parameterBag;
+    //
+    /** @var Client $alphaVantageClient */
+    private $alphaVantageClient;
 
-    public function __construct(ParameterBagInterface $parameterBag,ETFRepository $ETFRepository, HttpClientInterface $client, EntityManagerInterface $entityManager, RowRepository $rowRepository, CurrencyChangeRepository $currencyChangeRepository, UpdateTotalAccountValue $totalAccountValue, Security $security, InvestissementRepository $investissementRepository)
+    public function __construct(ParameterBagInterface $parameterBag, ETFRepository $ETFRepository, HttpClientInterface $client, EntityManagerInterface $entityManager, RowRepository $rowRepository, CurrencyChangeRepository $currencyChangeRepository, UpdateTotalAccountValue $totalAccountValue, Security $security, InvestissementRepository $investissementRepository)
     {
         $this->parameterBag = $parameterBag;
         $this->ETFRepository = $ETFRepository;
@@ -38,13 +40,18 @@ class GetETFChange
         $this->totalAccountValue = $totalAccountValue;
         $this->security = $security;
         $this->investissementRepository = $investissementRepository;
+        //
+        $option = new Options();
+        $option->setApiKey($parameterBag->get('API_KEY'));
+        $this->alphaVantageClient = new Client($option);
     }
 
 
     /*
      * @todo: recupérer la valeur actuel des etfs que j'ai dans la bdd et les update PUIS update les stocks des users en fonction
      */
-    public function getAndPushAllETF(){
+    public function getAndPushAllETF()
+    {
 
         $allEtfs = $this->ETFRepository->findOlders();
 
@@ -52,49 +59,43 @@ class GetETFChange
 
         $currencyRateValue = $this->currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue();
 
-            $response = $this->client->request(
-                'GET',
-                'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' . $etf->getSymbol() . '&apikey='. $this->parameterBag->get('API_KEY')
-            //'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo'
-            );
+        $response = $this->alphaVantageClient->timeSeries()->globalQuote($etf->getSymbol());
 
-            $data = $response->getContent();
-            $data = json_decode($data, true);
-            $value = $data["Global Quote"]["05. price"];
-            $value = round($value, 2);
+        $value = $response["Global Quote"]["05. price"];
+        $value = round($value, 2);
 
-            $etf->setValue($value);
-            $etf->setUpdatedAt(new \DateTime());
-            //PUSH NEW ETF VALUE IN DB
-            $this->entityManager->persist($etf);
+        $etf->setValue($value);
+        $etf->setUpdatedAt(new \DateTime());
+        //PUSH NEW ETF VALUE IN DB
+        $this->entityManager->persist($etf);
+        $this->entityManager->flush();
+
+        //UPDATE ROWS OF USERS WHO HAVE THIS ETF
+        $rows = $this->rowRepository->findBy(array('Symbol' => $etf->getSymbol(), 'type' => 'ETF'));
+        foreach ($rows as $row) {
+            $row->setValue($value);
+            $row->setTotalValue($value * $row->getNumber());
+
+            if ($row->getDevise() == "USD" || is_null($row->getDevise())) {
+                $row->setValueUSD($value);
+                $row->setTotalValueUSD($value * $row->getNumber());
+            } elseif ($row->getDevise() == "EUR") {
+                $row->setValueUSD(round($value * $currencyRateValue, 2));
+                $row->setTotalValueUSD(round(($value * $row->getNumber()) * $currencyRateValue, 2));
+            }
+
+            $this->entityManager->persist($row);
             $this->entityManager->flush();
 
-            //UPDATE ROWS OF USERS WHO HAVE THIS ETF
-            $rows = $this->rowRepository->findBy(array('Symbol' => $etf->getSymbol(), 'type' => 'ETF'));
-            foreach ($rows as $row){
-                $row->setValue($value);
-                $row->setTotalValue($value * $row->getNumber());
+            //get user of this rows
+            $investId = $row->getInvestAttach();
+            $invest = $this->investissementRepository->find($investId);
+            $user = $invest->getUser();
 
-                if ($row->getDevise() == "USD" || is_null($row->getDevise())){
-                    $row->setValueUSD($value);
-                    $row->setTotalValueUSD($value * $row->getNumber());
-                }elseif ($row->getDevise() == "EUR"){
-                    $row->setValueUSD(round($value * $currencyRateValue, 2));
-                    $row->setTotalValueUSD(round(($value * $row->getNumber()) * $currencyRateValue, 2));
-                }
+            //update values user with the new etf value
+            $this->totalAccountValue->updateTotalValueSpecificUser($user);
 
-                $this->entityManager->persist($row);
-                $this->entityManager->flush();
-
-                //get user of this rows
-                $investId = $row->getInvestAttach();
-                $invest = $this->investissementRepository->find($investId);
-                $user = $invest->getUser();
-
-                //update values user with the new etf value
-                $this->totalAccountValue->updateTotalValueSpecificUser($user);
-
-            }
+        }
     }
 
 }

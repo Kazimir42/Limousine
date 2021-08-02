@@ -8,6 +8,7 @@ use App\Repository\InvestissementRepository;
 use App\Service\AccountTotalMath;
 use App\Service\GetAccountTotalValue;
 use App\Service\GetCryptoChange;
+use App\Service\GetCurrencyChange;
 use App\Service\GetETFChange;
 use App\Service\GetStockChange;
 use App\Service\UpdateEURValues;
@@ -22,8 +23,13 @@ class MainController extends AbstractController
     /**
      * @Route("/", name="main_home")
      */
-    public function home(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository, GetETFChange $ETFChange, GetStockChange $stockChange, GetCryptoChange $cryptoChange): Response{
+    public function home(InvestissementRepository $investissementRepository, AccountTotalMath $accountTotalMath, HistoricalRepository $historicalRepository, GetETFChange $ETFChange, GetStockChange $stockChange, GetCryptoChange $cryptoChange, GetCurrencyChange $currencyChange, UpdateTotalAccountValue $totalAccountValue): Response{
 
+        //$ETFChange->getAndPushAllETF();
+        //$stockChange->getAndPushAllStock();
+        //$currencyChange->getExchangeRateUSDToEUR();
+        //$currencyChange->getExchangeRateEURToUSD();
+        //$totalAccountValue->updateTotalValue();
 
         //DISPLAY TOTAL VALUE IN USD
         $user = $this->getUser();
