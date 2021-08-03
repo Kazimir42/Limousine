@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route("investment/{id}/row", name="row_")
@@ -147,6 +148,7 @@ class RowController extends AbstractController
                     $stock->setSymbol($row->getSymbol());
                     $stock->setValue($row->getValue());
                     $stock->setDevise($row->getDevise());
+                    $stock->setUpdatedAt(new \DateTime());
 
                     //GET THE STOCK
                     $stockExist = $stockRepository->findOneBy(array('symbol' => $row->getSymbol()));
@@ -173,6 +175,7 @@ class RowController extends AbstractController
                     $etf->setSymbol($row->getSymbol());
                     $etf->setValue($row->getValue());
                     $etf->setDevise($row->getDevise());
+                    $etf->setUpdatedAt(new \DateTime());
 
                     //GET THE ETF
                     $etfExist = $ETFRepository->findOneBy(array('symbol' => $row->getSymbol()));
@@ -197,6 +200,7 @@ class RowController extends AbstractController
                     $crypto = new Crypto();
                     $crypto->setName($resultName);
                     $crypto->setSymbol($row->getSymbol());
+                    $crypto->setUpdatedAt(new \DateTime());
 
                     if ($row->getDevise() == "USD" || is_null($row->getDevise())){
 
