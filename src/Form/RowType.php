@@ -18,6 +18,9 @@ class RowType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('resultName', HiddenType::class,[
+                'mapped' => false,
+            ])
             ->add('type', HiddenType::class)
             ->add('symbol', HiddenType::class)
             ->add('number', NumberType::class)
@@ -37,6 +40,7 @@ class RowType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Row::class,
+            'allow_add' => true,
         ]);
     }
 }

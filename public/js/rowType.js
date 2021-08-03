@@ -395,11 +395,11 @@ function updateBaseInput(arrayInfo){
 
     let rowSelect = document.getElementById("row_result");
     rowSelect.removeAttribute("oninput");
-    rowSelect.setAttribute("oninput","hydrateOtherInput()");
+    rowSelect.setAttribute("oninput","hydrateOtherInput(this)");
 
 }
 
-function hydrateOtherInput(){
+function hydrateOtherInput(elem){
     //get value from input and make it an array
     let selectedStockOrEtf = document.getElementById("row_result");
     let infos = selectedStockOrEtf.options[selectedStockOrEtf.selectedIndex].text;
@@ -418,6 +418,13 @@ function hydrateOtherInput(){
     formName.removeAttribute("disabled");
 
     formSymbol.value = infoArray[1];
+
+    let content = document.getElementById('row_result');
+    let contentText = elem.options[elem.selectedIndex].text;
+    let contentTile = contentText.split(' | ')
+
+    let rowResultName = document.getElementById('row_resultName');
+    rowResultName.value = contentTile[0];
 
     getValueForThisSymbol(infoArray[1])
 }

@@ -113,6 +113,7 @@ class RowController extends AbstractController
 
         if ($rowForm->isSubmitted() && $rowForm->isValid()){
 
+            $resultName = $rowForm->get('resultName')->getData();
 
             if ($row->getDevise() == 'EUR'){
                 $theValue = $row->getValue() *  $currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue();
@@ -142,7 +143,7 @@ class RowController extends AbstractController
                 case "STOCK":
 
                     $stock = new Stock();
-                    $stock->setName($row->getName());
+                    $stock->setName($resultName);
                     $stock->setSymbol($row->getSymbol());
                     $stock->setValue($row->getValue());
                     $stock->setDevise($row->getDevise());
@@ -168,7 +169,7 @@ class RowController extends AbstractController
                 case "ETF":
 
                     $etf = new ETF();
-                    $etf->setName($row->getName());
+                    $etf->setName($resultName);
                     $etf->setSymbol($row->getSymbol());
                     $etf->setValue($row->getValue());
                     $etf->setDevise($row->getDevise());
@@ -194,7 +195,7 @@ class RowController extends AbstractController
                 case "CRYPTO":
 
                     $crypto = new Crypto();
-                    $crypto->setName($row->getName());
+                    $crypto->setName($resultName);
                     $crypto->setSymbol($row->getSymbol());
 
                     if ($row->getDevise() == "USD" || is_null($row->getDevise())){
