@@ -39,6 +39,8 @@ class MainController extends AbstractController
         $a = $test->retrieve('AMZ');
 
 
+
+
         //DISPLAY TOTAL VALUE IN USD
         $user = $this->getUser();
         $investissements = $investissementRepository->findAllByUserId($user);

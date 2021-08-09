@@ -4,6 +4,7 @@
 namespace App\Service\ExchangeClient;
 
 
+
 use PHPHtmlParser\Dom;
 
 class YahooFinanceScrappingClient implements ExchangeClient
@@ -19,7 +20,6 @@ class YahooFinanceScrappingClient implements ExchangeClient
     {
         $dom = new Dom();
         $dom->loadFromUrl('https://fr.finance.yahoo.com/quote/COIN');
-
 
         $contents = $dom->find('#app');
         $contents = $contents->find('div data-reactid="1"');
