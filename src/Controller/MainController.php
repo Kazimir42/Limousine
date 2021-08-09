@@ -6,6 +6,9 @@ use App\Entity\Historical;
 use App\Repository\HistoricalRepository;
 use App\Repository\InvestissementRepository;
 use App\Service\AccountTotalMath;
+use App\Service\ExchangeClient\AlphaVantageClient;
+use App\Service\ExchangeClient\ExchangeClient;
+use App\Service\ExchangeClient\YahooFinanceScrappingClient;
 use App\Service\GetAccountTotalValue;
 use App\Service\GetCryptoChange;
 use App\Service\GetCurrencyChange;
@@ -14,6 +17,7 @@ use App\Service\GetStockChange;
 use App\Service\UpdateEURValues;
 use App\Service\UpdateTotalAccountValue;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPHtmlParser\Dom;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +34,10 @@ class MainController extends AbstractController
         //$currencyChange->getExchangeRateUSDToEUR();
         //$currencyChange->getExchangeRateEURToUSD();
         //$totalAccountValue->updateTotalValue();
+
+        $test = new YahooFinanceScrappingClient();
+        $a = $test->retrieve('AMZ');
+
 
         //DISPLAY TOTAL VALUE IN USD
         $user = $this->getUser();
