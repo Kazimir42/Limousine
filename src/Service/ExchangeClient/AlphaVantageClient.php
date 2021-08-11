@@ -11,7 +11,7 @@ class AlphaVantageClient implements ExchangeClient
     {
     }
 
-    public function retrieve(string $symbol): float
+    public function retrieve(string $symbol): array
     {
         dd('test');
     }

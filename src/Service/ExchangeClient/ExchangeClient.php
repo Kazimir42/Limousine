@@ -6,5 +6,5 @@ namespace App\Service\ExchangeClient;
 
 interface ExchangeClient
 {
-    public function retrieve(string $symbol): float;
+    public function retrieve(string $symbol): array;
 }

@@ -35,10 +35,8 @@ class MainController extends AbstractController
         //$currencyChange->getExchangeRateEURToUSD();
         //$totalAccountValue->updateTotalValue();
 
-        $test = new YahooFinanceScrappingClient();
-        $a = $test->retrieve('AMZ');
-
-
+        //$test = new YahooFinanceScrappingClient();
+        //$a = $test->retrieve('TSLA');
 
 
         //DISPLAY TOTAL VALUE IN USD

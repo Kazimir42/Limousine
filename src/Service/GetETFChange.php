@@ -9,6 +9,7 @@ use App\Repository\CurrencyChangeRepository;
 use App\Repository\ETFRepository;
 use App\Repository\InvestissementRepository;
 use App\Repository\RowRepository;
+use App\Service\ExchangeClient\YahooFinanceScrappingClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Security;
@@ -25,6 +26,8 @@ class GetETFChange
     private $security;
     private $investissementRepository;
     private $parameterBag;
+    private $yahooFinanceClient;
+
     //
     /** @var Client $alphaVantageClient */
     private $alphaVantageClient;
@@ -44,12 +47,9 @@ class GetETFChange
         $option = new Options();
         $option->setApiKey($parameterBag->get('API_KEY'));
         $this->alphaVantageClient = new Client($option);
+        $this->yahooFinanceClient = new YahooFinanceScrappingClient();
     }
 
-
-    /*
-     * @todo: recupérer la valeur actuel des etfs que j'ai dans la bdd et les update PUIS update les stocks des users en fonction
-     */
     public function getAndPushAllETF()
     {
 
@@ -59,42 +59,51 @@ class GetETFChange
 
         $currencyRateValue = $this->currencyChangeRepository->findOneBy(array('currencyFrom' => 'EUR', 'currencyTo' => 'USD'))->getRateValue();
 
-        $response = $this->alphaVantageClient->timeSeries()->globalQuote($etf->getSymbol());
+        $response = $this->yahooFinanceClient->retrieve($etf->getSymbol());
+        $value = $response['value'];
 
-        $value = $response["Global Quote"]["05. price"];
-        $value = round($value, 2);
+        if ($value != null) {
+            //$response = $this->alphaVantageClient->timeSeries()->globalQuote($etf->getSymbol());
+            //$value = $response["Global Quote"]["05. price"];
 
-        $etf->setValue($value);
-        $etf->setUpdatedAt(new \DateTime());
-        //PUSH NEW ETF VALUE IN DB
-        $this->entityManager->persist($etf);
-        $this->entityManager->flush();
+            $value = round($value, 2);
 
-        //UPDATE ROWS OF USERS WHO HAVE THIS ETF
-        $rows = $this->rowRepository->findBy(array('Symbol' => $etf->getSymbol(), 'type' => 'ETF'));
-        foreach ($rows as $row) {
-            $row->setValue($value);
-            $row->setTotalValue($value * $row->getNumber());
-
-            if ($row->getDevise() == "USD" || is_null($row->getDevise())) {
-                $row->setValueUSD($value);
-                $row->setTotalValueUSD($value * $row->getNumber());
-            } elseif ($row->getDevise() == "EUR") {
-                $row->setValueUSD(round($value * $currencyRateValue, 2));
-                $row->setTotalValueUSD(round(($value * $row->getNumber()) * $currencyRateValue, 2));
-            }
-
-            $this->entityManager->persist($row);
+            $etf->setValue($value);
+            $etf->setUpdatedAt(new \DateTime());
+            //PUSH NEW ETF VALUE IN DB
+            $this->entityManager->persist($etf);
             $this->entityManager->flush();
 
-            //get user of this rows
-            $investId = $row->getInvestAttach();
-            $invest = $this->investissementRepository->find($investId);
-            $user = $invest->getUser();
+            //UPDATE ROWS OF USERS WHO HAVE THIS ETF
+            $rows = $this->rowRepository->findBy(array('Symbol' => $etf->getSymbol(), 'type' => 'ETF'));
+            foreach ($rows as $row) {
+                $row->setValue($value);
+                $row->setTotalValue($value * $row->getNumber());
 
-            //update values user with the new etf value
-            $this->totalAccountValue->updateTotalValueSpecificUser($user);
+                if ($row->getDevise() == "USD" || is_null($row->getDevise())) {
+                    $row->setValueUSD($value);
+                    $row->setTotalValueUSD($value * $row->getNumber());
+                } elseif ($row->getDevise() == "EUR") {
+                    $row->setValueUSD(round($value * $currencyRateValue, 2));
+                    $row->setTotalValueUSD(round(($value * $row->getNumber()) * $currencyRateValue, 2));
+                }
 
+                $this->entityManager->persist($row);
+                $this->entityManager->flush();
+
+                //get user of this rows
+                $investId = $row->getInvestAttach();
+                $invest = $this->investissementRepository->find($investId);
+                $user = $invest->getUser();
+
+                //update values user with the new etf value
+                $this->totalAccountValue->updateTotalValueSpecificUser($user);
+
+            }
+        }else{
+            $etf->setUpdatedAt(new \DateTime());
+            $this->entityManager->persist($etf);
+            $this->entityManager->flush();
         }
     }
 
